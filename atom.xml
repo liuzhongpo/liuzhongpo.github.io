@@ -3,11 +3,11 @@
   <title>LZP♂</title>
   
   
-  <link href="https:////github.com/liuzhongpo/lzpo.github.io.git/atom.xml" rel="self"/>
+  <link href="/blogs/hexo/atom.xml" rel="self"/>
   
-  <link href="https:////liuzhongpo.github.io/lzpo.github.io/"/>
+  <link href="https://liuzhongpo.github.io/lzpo.github.io/blogs/hexo/"/>
   <updated>2017-09-13T14:25:19.972Z</updated>
-  <id>https:////liuzhongpo.github.io/lzpo.github.io/</id>
+  <id>https://liuzhongpo.github.io/lzpo.github.io/blogs/hexo/</id>
   
   <author>
     <name>南巷清风</name>
@@ -18,8 +18,8 @@
   
   <entry>
     <title>article title</title>
-    <link href="https:////liuzhongpo.github.io/lzpo.github.io/2017/09/13/article-title/"/>
-    <id>https:////liuzhongpo.github.io/lzpo.github.io/2017/09/13/article-title/</id>
+    <link href="https://liuzhongpo.github.io/lzpo.github.io/blogs/hexo/2017/09/13/article-title/"/>
+    <id>https://liuzhongpo.github.io/lzpo.github.io/blogs/hexo/2017/09/13/article-title/</id>
     <published>2017-09-13T14:19:47.000Z</published>
     <updated>2017-09-13T14:25:19.972Z</updated>
     
@@ -40,8 +40,8 @@
   
   <entry>
     <title>Hello World</title>
-    <link href="https:////liuzhongpo.github.io/lzpo.github.io/2017/09/13/hello-world/"/>
-    <id>https:////liuzhongpo.github.io/lzpo.github.io/2017/09/13/hello-world/</id>
+    <link href="https://liuzhongpo.github.io/lzpo.github.io/blogs/hexo/2017/09/13/hello-world/"/>
+    <id>https://liuzhongpo.github.io/lzpo.github.io/blogs/hexo/2017/09/13/hello-world/</id>
     <published>2017-09-13T14:04:13.599Z</published>
     <updated>2017-09-13T14:04:13.599Z</updated>
     
