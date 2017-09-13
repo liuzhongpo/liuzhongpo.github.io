@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
-  <title>LZP♂</title>
+  <title>LZP - 博客</title>
   
-  
+  <subtitle>信念和目标，必须永远洋溢在内心</subtitle>
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://liuzhongpo.github.io/"/>
@@ -10,7 +10,7 @@
   <id>https://liuzhongpo.github.io/</id>
   
   <author>
-    <name>南巷清风</name>
+    <name>程序员</name>
     
   </author>
   
