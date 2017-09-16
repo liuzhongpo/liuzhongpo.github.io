@@ -8,9 +8,10 @@
       <content type="html"><![CDATA[<h1 id="1、基础环境搭建"><a href="#1、基础环境搭建" class="headerlink" title="1、基础环境搭建"></a>1、基础环境搭建</h1><ul>
 <li>node.js环境配置</li>
 <li>git安装</li>
-<li>github账户配置</li>
+<li>github账户配置<a id="more"></a>
+<h2 id="1-1-node-js环境"><a href="#1-1-node-js环境" class="headerlink" title="1.1 node.js环境"></a>1.1 node.js环境</h2></li>
 </ul>
-<h2 id="1-1-node-js环境"><a href="#1-1-node-js环境" class="headerlink" title="1.1 node.js环境"></a>1.1 node.js环境</h2><ol>
+<ol>
 <li><p>下载node.js安装文件</p>
 <blockquote>
 <p><a href="https://nodejs.org/dist/v6.11.3/node-v4.2.3-x64.msi" target="_blank" rel="external">Windows Installer 64-bit</a><br><br><a href="https://nodejs.org/dist/v4.2.3/node-v4.2.3-x86.msi" target="_blank" rel="external">Windows Installer 32-bit</a><br></p>
