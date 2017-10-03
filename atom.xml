@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://liuzhongpo.github.io/"/>
-  <updated>2017-09-16T09:00:04.915Z</updated>
+  <updated>2017-10-03T15:01:29.989Z</updated>
   <id>https://liuzhongpo.github.io/</id>
   
   <author>
@@ -21,7 +21,7 @@
     <link href="https://liuzhongpo.github.io/2017/09/14/%E5%9F%BA%E4%BA%8EHexo%E5%92%8CGithub%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2/"/>
     <id>https://liuzhongpo.github.io/2017/09/14/基于Hexo和Github搭建博客/</id>
     <published>2017-09-13T16:00:00.000Z</published>
-    <updated>2017-09-16T09:00:04.915Z</updated>
+    <updated>2017-10-03T15:01:29.989Z</updated>
     
     <content type="html"><![CDATA[<h1 id="1、基础环境搭建"><a href="#1、基础环境搭建" class="headerlink" title="1、基础环境搭建"></a>1、基础环境搭建</h1><ul><li>node.js环境配置</li><li>git安装</li><li>github账户配置<a id="more"></a><h2 id="1-1-node-js环境"><a href="#1-1-node-js环境" class="headerlink" title="1.1 node.js环境"></a>1.1 node.js环境</h2></li></ul><ol><li><p>下载node.js安装文件</p><blockquote><p><a href="https://nodejs.org/dist/v6.11.3/node-v4.2.3-x64.msi" target="_blank" rel="external">Windows Installer 64-bit</a><br><br><a href="https://nodejs.org/dist/v4.2.3/node-v4.2.3-x86.msi" target="_blank" rel="external">Windows Installer 32-bit</a><br></p></blockquote></li></ol><ol><li><p>安装node.js</p><p>因为 hexo 整个博客框架是基于node.js的，所以必须安装node.js环境。我安装的是最新的版本，v6.11.3，安装过程一路 next 即可。</p></li></ol>]]></content>
     
