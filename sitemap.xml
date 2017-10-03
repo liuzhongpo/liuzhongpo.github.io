@@ -2,6 +2,20 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://liuzhongpo.github.io/about/index.html</loc>
+    
+    <lastmod>2017-10-03T14:42:12.074Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://liuzhongpo.github.io/about/index-1.html</loc>
+    
+    <lastmod>2017-10-03T14:26:23.092Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://liuzhongpo.github.io/tags/index.html</loc>
     
     <lastmod>2017-09-16T09:33:44.472Z</lastmod>
@@ -19,13 +33,6 @@
     <loc>https://liuzhongpo.github.io/note/index.html</loc>
     
     <lastmod>2017-09-16T06:11:40.261Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://liuzhongpo.github.io/about/index.html</loc>
-    
-    <lastmod>2017-09-16T04:52:19.118Z</lastmod>
     
   </url>
   
