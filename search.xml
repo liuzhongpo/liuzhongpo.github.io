@@ -3,40 +3,28 @@
   
     
     <entry>
-      <title><![CDATA[基于Hexo和Github搭建博客]]></title>
-      <url>/2017/09/14/%E5%9F%BA%E4%BA%8EHexo%E5%92%8CGithub%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2/</url>
-      <content type="html"><![CDATA[<h1 id="1、基础环境搭建"><a href="#1、基础环境搭建" class="headerlink" title="1、基础环境搭建"></a>1、基础环境搭建</h1><ul>
-<li>node.js环境配置</li>
-<li>git安装</li>
-<li>github账户配置<a id="more"></a>
-<h2 id="1-1-node-js环境"><a href="#1-1-node-js环境" class="headerlink" title="1.1 node.js环境"></a>1.1 node.js环境</h2></li>
-</ul>
-<ol>
-<li><p>下载node.js安装文件</p>
-<blockquote>
-<p><a href="https://nodejs.org/dist/v6.11.3/node-v4.2.3-x64.msi" target="_blank" rel="external">Windows Installer 64-bit</a><br><br><a href="https://nodejs.org/dist/v4.2.3/node-v4.2.3-x86.msi" target="_blank" rel="external">Windows Installer 32-bit</a><br></p>
-</blockquote>
-</li>
-</ol>
-<ol>
-<li><p>安装node.js</p>
-<p>因为 hexo 整个博客框架是基于node.js的，所以必须安装node.js环境。我安装的是最新的版本，v6.11.3，安装过程一路 next 即可。</p>
-</li>
-</ol>
+      <title><![CDATA[【设计模式】单例模式]]></title>
+      <url>/2017/10/15/%E3%80%90%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E3%80%91%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/</url>
+      <content type="html"><![CDATA[<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在GoF的23种设计模式中，单例模式（Singleton Pattern）是 Java 中最简单的设计模式之一。这种类型的设计模式属于创建型模式，它提供了一种创建对象的最佳方式。所谓单例模式，简单来说，就是在整个应用中保证只有一个类的实例存在。这里主要介绍5种写法。</p>
+<h2 id="饿汉式"><a href="#饿汉式" class="headerlink" title="饿汉式"></a>饿汉式</h2><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;以下写法，是基于classloader机制，避免了多线程的同步问题，但在加载时没有达到lazy loading的效果。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Singleton</span> </span>&#123;  </div><div class="line">	<span class="keyword">private</span> <span class="keyword">static</span> Singleton instance = <span class="keyword">new</span> Singleton();  </div><div class="line">	<span class="function"><span class="keyword">private</span> <span class="title">Singleton</span> <span class="params">()</span></span>&#123;&#125;  </div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Singleton <span class="title">getInstance</span><span class="params">()</span> </span>&#123;  </div><div class="line">		<span class="keyword">return</span> instance;  </div><div class="line">	&#125;  </div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h2 id="懒汉式-非线程安全"><a href="#懒汉式-非线程安全" class="headerlink" title="懒汉式-非线程安全"></a>懒汉式-非线程安全</h2><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;以下写法，lazy loading很明显，但是致命的是在多线程不能正常工作。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Singleton</span> </span>&#123;  </div><div class="line">    <span class="keyword">private</span> <span class="keyword">static</span> Singleton instance;  </div><div class="line">    <span class="function"><span class="keyword">private</span> <span class="title">Singleton</span> <span class="params">()</span></span>&#123;&#125;  </div><div class="line">  </div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Singleton <span class="title">getInstance</span><span class="params">()</span> </span>&#123;  </div><div class="line">    	<span class="keyword">if</span> (instance == <span class="keyword">null</span>) &#123;  </div><div class="line">        	instance = <span class="keyword">new</span> Singleton();  </div><div class="line">    	&#125;  </div><div class="line">    	<span class="keyword">return</span> instance;  </div><div class="line">    &#125;  </div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h2 id="懒汉式-线程安全"><a href="#懒汉式-线程安全" class="headerlink" title="懒汉式-线程安全"></a>懒汉式-线程安全</h2><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这种写法能在多线程中很好的工作，而且具备lazy loading，但同步方法效率很低。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Singleton</span> </span>&#123;  </div><div class="line">    <span class="keyword">private</span> <span class="keyword">static</span> Singleton instance;  </div><div class="line">    <span class="function"><span class="keyword">private</span> <span class="title">Singleton</span> <span class="params">()</span></span>&#123;&#125;  </div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">synchronized</span> Singleton <span class="title">getInstance</span><span class="params">()</span> </span>&#123;  </div><div class="line">    	<span class="keyword">if</span> (instance == <span class="keyword">null</span>) &#123;  </div><div class="line">        	instance = <span class="keyword">new</span> Singleton();  </div><div class="line">    	&#125;  </div><div class="line">    	<span class="keyword">return</span> instance;  </div><div class="line">    &#125;  </div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h2 id="double-check"><a href="#double-check" class="headerlink" title="double check"></a>double check</h2><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这种写法是比较推崇的一种写法。加锁双重检查对效率也有一定影响，不过影响不大。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DubbleSingleton</span> </span>&#123;</div><div class="line">    <span class="keyword">private</span> <span class="keyword">volatile</span> <span class="keyword">static</span> DubbleSingleton ds;</div><div class="line">	<span class="function"><span class="keyword">private</span> <span class="title">DubbleSingleton</span><span class="params">()</span></span>&#123;&#125;</div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> DubbleSingleton <span class="title">getIntance</span><span class="params">()</span></span>&#123;</div><div class="line">		<span class="keyword">if</span>(ds == <span class="keyword">null</span>)&#123;</div><div class="line">			<span class="keyword">synchronized</span> (DubbleSingleton.class) &#123;</div><div class="line">				<span class="keyword">if</span>(ds == <span class="keyword">null</span>)&#123;</div><div class="line">					ds = <span class="keyword">new</span> DubbleSingleton();</div><div class="line">				&#125;</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">		<span class="keyword">return</span> ds;</div><div class="line">	&#125;	</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h2 id="静态内部类"><a href="#静态内部类" class="headerlink" title="静态内部类"></a>静态内部类</h2><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这种方式:InnerSingleton类被装载了，Singletion不一定被初始化。因为Singletion类没有被主动使用，只有显示通过调用getInstance方法时，才会显示装载SingletonHolder类。有效的实现了 lazy loading，同时也避免加锁。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">InnerSingleton</span> </span>&#123;</div><div class="line">	<span class="keyword">private</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Singletion</span> </span>&#123;</div><div class="line">		<span class="keyword">private</span> <span class="keyword">static</span> Singletion single = <span class="keyword">new</span> Singletion();</div><div class="line">	&#125;</div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Singletion <span class="title">getInstance</span><span class="params">()</span></span>&#123;</div><div class="line">		<span class="keyword">return</span> Singletion.single;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
 ]]></content>
       
         <categories>
             
-            <category> 技术杂技 </category>
+            <category> 设计模式 </category>
             
         </categories>
         
         
         <tags>
             
-            <tag> hexo </tag>
+            <tag> 设计模式 </tag>
             
-            <tag> github </tag>
+            <tag> 多线程 </tag>
             
         </tags>
         
