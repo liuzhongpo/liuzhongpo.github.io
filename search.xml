@@ -85,9 +85,12 @@
 <li>代码里出现异常，用try…catch…，try 出现运行期异常，比如：Integer.parseInt(“a”); 或者throw new RuntimeException();<ol>
 <li>处理1：catch (InterruptedException e)  则线程到此结束（打断异常）</li>
 <li>处理2：catch里throw new RuntimeException();  则线程到此结束</li>
-<li>处理3：catch (Exception e)   则线程继续<h2 id="线程间通信"><a href="#线程间通信" class="headerlink" title="线程间通信"></a>线程间通信</h2>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;synchronized实现线程间的通信，后期再补充Lock锁方式的线程间通信。<h3 id="相关概念-1"><a href="#相关概念-1" class="headerlink" title="相关概念"></a>相关概念</h3></li>
+<li>处理3：catch (Exception e)   则线程继续</li>
 </ol>
 </li>
+</ul>
+<h2 id="线程间通信"><a href="#线程间通信" class="headerlink" title="线程间通信"></a>线程间通信</h2><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;synchronized实现线程间的通信，后期再补充Lock锁方式的线程间通信。</p>
+<h3 id="相关概念-1"><a href="#相关概念-1" class="headerlink" title="相关概念"></a>相关概念</h3><ul>
 <li><strong>线程通信</strong>：线程是操作系统中独立的个体，但这些个体如果不经过特殊的处理就不能成为一个整体。线程间通信就成为整体的必用方式之一。当线程存在通信指挥，系统间的交互性会更强大，在提高CPU利用率的同时还会使开发人员对线程任务在处理过程中进行有效的把控与监督。</li>
 <li>使用wait/notify方法实现线程间的通信。（注意：这两个方法都是Object类的方法，换句话说，Java为所有对象都提供了这两个方法）<ol>
 <li>wait和notify必须配合synchronized关键字使用。</li>
