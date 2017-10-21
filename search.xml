@@ -33,7 +33,7 @@
     <entry>
       <title><![CDATA[Java synchronized关键字]]></title>
       <url>/2017/10/15/Java%20synchronized%E5%85%B3%E9%94%AE%E5%AD%97/</url>
-      <content type="html"><![CDATA[<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;学习synchronized关键字，首先要明白几个多线程的概念。</p>
+      <content type="html"><![CDATA[<p>学习synchronized关键字，首先要明白几个多线程的概念。</p>
 <ul>
 <li><strong>线程安全</strong>：当多个线程访问某一个类（对象或方法）始终都能表现出正确的行为，那么这个类（对象或方法）就是线程安全的。</li>
 <li><strong>互斥区或临界区</strong>：synchronized可以在任意对象及方法上加锁，而加锁的这段代码称为“互斥区”或“临界区”。</li>
