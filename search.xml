@@ -54,7 +54,9 @@
         
         <tags>
             
-            <tag> 多线程，volatile </tag>
+            <tag> 多线程 </tag>
+            
+            <tag> volatile </tag>
             
         </tags>
         
@@ -142,7 +144,9 @@
         
         <tags>
             
-            <tag> 多线程，synchronized </tag>
+            <tag> 多线程 </tag>
+            
+            <tag> synchronized </tag>
             
         </tags>
         
