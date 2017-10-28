@@ -15,18 +15,18 @@
 
 
 
-<meta name="description" content="Java语言的关键字，当它用来修饰一个方法或者一段代码块的时候，能够保证在同一时刻最多只有一个线程执行该段代码。">
-<meta name="keywords" content="多线程">
+<meta name="description" content="总结synchronized的用法以及碰到的问题">
+<meta name="keywords" content="多线程，synchronized">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Java synchronized关键字">
+<meta property="og:title" content="synchronized关键字">
 <meta property="og:url" content="https://liuzhongpo.github.io/2017/10/21/Java synchronized关键字/index.html">
 <meta property="og:site_name" content="一如年少">
-<meta property="og:description" content="Java语言的关键字，当它用来修饰一个方法或者一段代码块的时候，能够保证在同一时刻最多只有一个线程执行该段代码。">
+<meta property="og:description" content="总结synchronized的用法以及碰到的问题">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-10-21T15:47:18.862Z">
+<meta property="og:updated_time" content="2017-10-28T10:42:56.481Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Java synchronized关键字">
-<meta name="twitter:description" content="Java语言的关键字，当它用来修饰一个方法或者一段代码块的时候，能够保证在同一时刻最多只有一个线程执行该段代码。">
+<meta name="twitter:title" content="synchronized关键字">
+<meta name="twitter:description" content="总结synchronized的用法以及碰到的问题">
 
 <link rel="apple-touch-icon" href= "/apple-touch-icon.png">
 
@@ -56,7 +56,7 @@
 <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
 
 
-<title>Java synchronized关键字 | 一如年少</title>
+<title>synchronized关键字 | 一如年少</title>
 
 <script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
 <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
@@ -185,7 +185,7 @@
                 
                 <section class="switch-part switch-part2">
                     <div class="widget tagcloud" id="js-tagcloud">
-                        <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/多线程/">多线程</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/多线程，volatile/">多线程，volatile</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/设计模式/">设计模式</a></li></ul>
+                        <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/多线程/">多线程</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/多线程，synchronized/">多线程，synchronized</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/多线程，volatile/">多线程，volatile</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/设计模式/">设计模式</a></li></ul>
                     </div>
                 </section>
                 
@@ -277,7 +277,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      Java synchronized关键字
+      synchronized关键字
     </h1>
   
 
@@ -292,7 +292,7 @@
 
         
     <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/多线程/">多线程</a></li></ul>
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/多线程，synchronized/">多线程，synchronized</a></li></ul>
     </div>
 
         <div class="clearfix"></div>
@@ -378,12 +378,12 @@
   
     
     <div class="copyright">
-        <p><span>本文标题:</span><a href="/2017/10/21/Java synchronized关键字/">Java synchronized关键字</a></p>
+        <p><span>本文标题:</span><a href="/2017/10/21/Java synchronized关键字/">synchronized关键字</a></p>
         <p><span>文章作者:</span><a href="/" title="回到主页">lzp</a></p>
         <p><span>发布时间:</span>2017-10-21, 00:00:00</p>
-        <p><span>最后更新:</span>2017-10-21, 23:47:18</p>
+        <p><span>最后更新:</span>2017-10-28, 18:42:56</p>
         <p>
-            <span>原始链接:</span><a class="post-url" href="/2017/10/21/Java synchronized关键字/" title="Java synchronized关键字">https://liuzhongpo.github.io/2017/10/21/Java synchronized关键字/</a>
+            <span>原始链接:</span><a class="post-url" href="/2017/10/21/Java synchronized关键字/" title="synchronized关键字">https://liuzhongpo.github.io/2017/10/21/Java synchronized关键字/</a>
             <span class="copy-path" data-clipboard-text="原文: https://liuzhongpo.github.io/2017/10/21/Java synchronized关键字/　　作者: lzp" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
             <script> var clipboard = new Clipboard('.copy-path'); </script>
         </p>
@@ -453,7 +453,7 @@
         </div>
         <script>
             window._bd_share_config={
-                "common":{"bdSnsKey":{},"bdText":"Java synchronized关键字　| 一如年少　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+                "common":{"bdSnsKey":{},"bdText":"synchronized关键字　| 一如年少　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
         </script>
     
 
@@ -501,7 +501,7 @@
         
     </div>
 
-    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2017/10/28/volatile关键字/">volatile关键字</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/21/Java synchronized关键字/">Java synchronized关键字</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/15/【设计模式】单例模式/">【设计模式】单例模式</a></li></ul>
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2017/10/28/volatile关键字/">volatile关键字</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/21/Java synchronized关键字/">synchronized关键字</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/15/【设计模式】单例模式/">【设计模式】单例模式</a></li></ul>
 
 
 

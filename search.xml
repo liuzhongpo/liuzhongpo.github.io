@@ -61,7 +61,7 @@
     </entry>
     
     <entry>
-      <title><![CDATA[Java synchronized关键字]]></title>
+      <title><![CDATA[synchronized关键字]]></title>
       <url>/2017/10/21/Java%20synchronized%E5%85%B3%E9%94%AE%E5%AD%97/</url>
       <content type="html"><![CDATA[<p>学习synchronized关键字，首先要明白几个多线程的概念。</p>
 <ul>
@@ -142,7 +142,7 @@
         
         <tags>
             
-            <tag> 多线程 </tag>
+            <tag> 多线程，synchronized </tag>
             
         </tags>
         

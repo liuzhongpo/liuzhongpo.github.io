@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://liuzhongpo.github.io/2017/10/21/Java%20synchronized%E5%85%B3%E9%94%AE%E5%AD%97/</loc>
+    
+    <lastmod>2017-10-28T10:42:56.481Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://liuzhongpo.github.io/2017/10/28/volatile%E5%85%B3%E9%94%AE%E5%AD%97/</loc>
     
     <lastmod>2017-10-28T10:39:28.963Z</lastmod>
@@ -12,13 +19,6 @@
     <loc>https://liuzhongpo.github.io/about/index.html</loc>
     
     <lastmod>2017-10-26T00:10:44.538Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://liuzhongpo.github.io/2017/10/21/Java%20synchronized%E5%85%B3%E9%94%AE%E5%AD%97/</loc>
-    
-    <lastmod>2017-10-21T15:47:18.862Z</lastmod>
     
   </url>
   
