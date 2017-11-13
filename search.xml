@@ -3,7 +3,7 @@
   
     
     <entry>
-      <title><![CDATA[技术杂技之Lombok]]></title>
+      <title><![CDATA[【技术杂技】Lombok]]></title>
       <url>/2017/11/12/%E3%80%90%E6%8A%80%E6%9C%AF%E6%9D%82%E6%8A%80%E3%80%91lombok/</url>
       <content type="html"><![CDATA[<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在实际开发中，大家都应该会碰到一个场景：定义大量的entity，然后通过Eclipse或者IDEA去生成其属性的构造器、getter、setter、equals、hashcode、toString方法；当要对某个属性进行改变时，都需要重新生成这些方法，那Java中有没有一种方式能够解决这个问题呢？答案是有，就是lombok。</p>
 <h1 id="Lombok简介"><a href="#Lombok简介" class="headerlink" title="Lombok简介"></a>Lombok简介</h1><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Lombok是一个可以通过简单的注解形式来帮助我们简化消除一些必须有但显得很臃肿的Java代码的工具，通过使用对应的注解，可以在编译源码的时候生成对应的方法。</p>
