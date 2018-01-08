@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+
+    <!--[if lt IE 9]>
+        <style>body {display: none; background: none !important} </style>
+        <meta http-equiv="Refresh" Content="0; url=//outdatedbrowser.com/" />
+    <![endif]-->
+
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="format-detection" content="telephone=no" />
+<meta name="author" content="lzp" />
+
+
+
+<meta name="description" content="众所周知，分布式协调服务很难正确无误的实现，它们很容易在竞争条件和死锁上犯错误。如何在这方面节省力气？Zookeeper是一个不错的选择。">
+<meta name="keywords" content="zookeeper">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【zookeeper】基础知识及操作">
+<meta property="og:url" content="https://liuzhongpo.github.io/2018/01/08/【zookeeper】基础知识以及操作/index.html">
+<meta property="og:site_name" content="LZP BLOG">
+<meta property="og:description" content="众所周知，分布式协调服务很难正确无误的实现，它们很容易在竞争条件和死锁上犯错误。如何在这方面节省力气？Zookeeper是一个不错的选择。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://s1.wailian.download/2018/01/08/image.png">
+<meta property="og:image" content="http://s1.wailian.download/2018/01/08/image54bc0.png">
+<meta property="og:image" content="http://s1.wailian.download/2018/01/08/imagef5df3.png">
+<meta property="og:image" content="http://s1.wailian.download/2018/01/08/imageb8b4b.png">
+<meta property="og:image" content="http://s1.wailian.download/2018/01/08/image408b2.png">
+<meta property="og:image" content="http://s1.wailian.download/2018/01/08/image73822.png">
+<meta property="og:image" content="http://s1.wailian.download/2018/01/08/imagec508a.png">
+<meta property="og:image" content="http://s1.wailian.download/2018/01/08/image63f03.png">
+<meta property="og:updated_time" content="2018-01-08T03:22:45.079Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="【zookeeper】基础知识及操作">
+<meta name="twitter:description" content="众所周知，分布式协调服务很难正确无误的实现，它们很容易在竞争条件和死锁上犯错误。如何在这方面节省力气？Zookeeper是一个不错的选择。">
+<meta name="twitter:image" content="http://s1.wailian.download/2018/01/08/image.png">
+
+<link rel="apple-touch-icon" href= "/apple-touch-icon.png">
+
+
+    <link rel="alternate" href="/atom.xml" title="LZP BLOG" type="application/atom+xml">
+
+
+
+    <link rel="shortcut icon" href="/favicon.png">
+
+
+
+
+
+    <link href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.css" rel="stylesheet">
+
+
+
+    <script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+    <link href="//cdn.bootcss.com/pace/1.0.2/themes/blue/pace-theme-minimal.css" rel="stylesheet">
+
+
+<link rel="stylesheet" href="/css/style.css">
+
+
+
+<link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+
+
+<title>【zookeeper】基础知识及操作 | LZP BLOG</title>
+
+<script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
+<script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+
+<script>
+    var yiliaConfig = {
+        fancybox: true,
+        animate: false,
+        isHome: false,
+        isPost: true,
+        isArchive: false,
+        isTag: false,
+        isCategory: false,
+        fancybox_js: "//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.js",
+        scrollreveal: "//cdn.bootcss.com/scrollReveal.js/3.1.4/scrollreveal.min.js",
+        search: true
+    }
+</script>
+
+
+    <script>
+        yiliaConfig.jquery_ui = [true, "//cdn.bootcss.com/jqueryui/1.10.4/jquery-ui.min.js", "//cdn.bootcss.com/jqueryui/1.10.4/css/jquery-ui.min.css"];
+    </script>
+
+
+
+    <script> yiliaConfig.rootUrl = "\/";</script>
+
+
+
+
+
+
+</head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+    <header id="header" class="inner">
+        <a href="/" class="profilepic">
+            <img src="/img/avatar.png" class="animated zoomIn">
+        </a>
+        <hgroup>
+          <h1 class="header-author"><a href="/">lzp</a></h1>
+        </hgroup>
+
+        
+        <p class="header-subtitle">信念和目标，永远洋溢在内心...</p>
+        
+
+        
+            <form id="search-form">
+            <input type="text" id="local-search-input" name="q" placeholder="search..." class="search form-control" autocomplete="off" autocorrect="off" searchonload="false" />
+            <i class="fa fa-times" onclick="resetSearch()"></i>
+            </form>
+            <div id="local-search-result"></div>
+            <p class='no-result'>No results found <i class='fa fa-spinner fa-pulse'></i></p>
+        
+
+
+        
+            <div id="switch-btn" class="switch-btn">
+                <div class="icon">
+                    <div class="icon-ctn">
+                        <div class="icon-wrap icon-house" data-idx="0">
+                            <div class="birdhouse"></div>
+                            <div class="birdhouse_holes"></div>
+                        </div>
+                        <div class="icon-wrap icon-ribbon hide" data-idx="1">
+                            <div class="ribbon"></div>
+                        </div>
+                        
+                        <div class="icon-wrap icon-link hide" data-idx="2">
+                            <div class="loopback_l"></div>
+                            <div class="loopback_r"></div>
+                        </div>
+                        
+                        
+                    </div>
+                    
+                </div>
+                <div class="tips-box hide">
+                    <div class="tips-arrow"></div>
+                    <ul class="tips-inner">
+                        <li>菜单</li>
+                        <li>标签</li>
+                        
+                        <li>友情链接</li>
+                        
+                        
+                    </ul>
+                </div>
+            </div>
+        
+
+        <div id="switch-area" class="switch-area">
+            <div class="switch-wrap">
+                <section class="switch-part switch-part1">
+                    <nav class="header-menu">
+                        <ul>
+                        
+                            <li><a href="/">主页</a></li>
+                        
+                            <li><a href="/archives/">归档</a></li>
+                        
+                            <li><a href="/tags/">标签</a></li>
+                        
+                            <li><a href="/about/">关于</a></li>
+                        
+                        </ul>
+                    </nav>
+                    <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" href="mailto:lzp9294@163.com" title="Email"></a>
+                            
+                                <a class="fa GitHub" href="https://github.com/liuzhongpo/" title="GitHub"></a>
+                            
+                                <a class="fa RSS" href="/atom.xml" title="RSS"></a>
+                            
+                        </ul>
+                    </nav>
+                </section>
+                
+                
+                <section class="switch-part switch-part2">
+                    <div class="widget tagcloud" id="js-tagcloud">
+                        <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Netty/">Netty</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/synchronized/">synchronized</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tool/">tool</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/volatile/">volatile</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/zookeeper/">zookeeper</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/多线程/">多线程</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/技术杂技/">技术杂技</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/服务器/">服务器</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/设计模式/">设计模式</a></li></ul>
+                    </div>
+                </section>
+                
+                
+                
+                <section class="switch-part switch-part3">
+                    <div id="js-friends">
+                    
+                      <a class="main-nav-link switch-friends-link" href="http://leeyom.top">leeyom</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="http://www.importnew.com">importnew</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="http://www.infoq.com/cn">InfoQ</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="http://www.oschina.net">oschina</a>
+                    
+                    </div>
+                </section>
+                
+
+                
+            </div>
+        </div>
+    </header>                
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+      <div class="overlay">
+          <div class="slider-trigger"></div>
+          <h1 class="header-author js-mobile-header hide"><a href="/" title="回到主页">lzp</a></h1>
+      </div>
+    <div class="intrude-less">
+        <header id="header" class="inner">
+            <a href="/" class="profilepic">
+                <img src="/img/avatar.png" class="animated zoomIn">
+            </a>
+            <hgroup>
+              <h1 class="header-author"><a href="/" title="回到主页">lzp</a></h1>
+            </hgroup>
+            
+            <p class="header-subtitle">信念和目标，永远洋溢在内心...</p>
+            
+            <nav class="header-menu">
+                <ul>
+                
+                    <li><a href="/">主页</a></li>
+                
+                    <li><a href="/archives/">归档</a></li>
+                
+                    <li><a href="/tags/">标签</a></li>
+                
+                    <li><a href="/about/">关于</a></li>
+                
+                <div class="clearfix"></div>
+                </ul>
+            </nav>
+            <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" target="_blank" href="mailto:lzp9294@163.com" title="Email"></a>
+                            
+                                <a class="fa GitHub" target="_blank" href="https://github.com/liuzhongpo/" title="GitHub"></a>
+                            
+                                <a class="fa RSS" target="_blank" href="/atom.xml" title="RSS"></a>
+                            
+                        </ul>
+            </nav>
+        </header>                
+    </div>
+    <link class="menu-list" tags="标签" friends="友情链接" about="关于我"/>
+</nav>
+      <div class="body-wrap"><article id="post-【zookeeper】基础知识以及操作" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2018/01/08/【zookeeper】基础知识以及操作/" class="article-date">
+      <time datetime="2018-01-07T16:00:00.000Z" itemprop="datePublished">2018-01-08</time>
+</a>
+
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      【zookeeper】基础知识及操作
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/zookeeper/">zookeeper</a>
+    </div>
+
+
+        
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/zookeeper/">zookeeper</a></li></ul>
+    </div>
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <h1 id="是什么？"><a href="#是什么？" class="headerlink" title="是什么？"></a>是什么？</h1><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;引用官方的说法：“Zookeeper是一个高性能，分布式的，开源分布式应用协调服务。它提供了简单原始的功能，分布式应用可以基于它实现更高级 的服务，比如同步，配置管理，集群管理，命名空间。它被设计为易于编程，使用文件系统目录树作为数据模型。服务端跑在java上，提供java和C的客户端 API”。也可以理解为：<strong>zookeeper = 文件系统+通知机制。</strong></p>
+<ul>
+<li>功能作用：命名服务、配置维护、集群管理、分布式消息同步和协调机制、负载均衡、对Dubbo支持。Zoopkeeper提供了一套很好的分布式集群管理的机制，就是它这种<strong>基于层次型的目录树的数据结构，并对树中的节点进行有效管理</strong>，从而可以设计出多种多样的分布式的数据管理模型，作为分布式系统的沟通调度桥梁。</li>
+<li>下载地址：<a href="https://zookeeper.apache.org/" target="_blank" rel="external">https://zookeeper.apache.org/</a><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="http://s1.wailian.download/2018/01/08/image.png" alt="image.png"></li>
+</ul>
+<h1 id="安装配置"><a href="#安装配置" class="headerlink" title="安装配置"></a>安装配置</h1><h2 id="linux下安装"><a href="#linux下安装" class="headerlink" title="linux下安装"></a>linux下安装</h2><p>前期准备：官网下载安装包，本次版本zookeeper-3.4.9.tar.gz，拷贝至/opt目录下。</p>
+<ol>
+<li><p>解压：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">tar -zxvf zookeeper-3.4.9.tar.gz</div></pre></td></tr></table></figure>
+</li>
+<li><p>新建专属zookeeper目录：mkdir /myzookeeper，随后将上一步解压的zookeeper内容拷贝进/myzookeeper目录内，拷贝：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">cp -rf  zookeeper-3.4.9 /myzookeeper/ zookeeper-3.4.9</div></pre></td></tr></table></figure>
+</li>
+<li><p>进入conf文件夹，拷贝zoo_sample.cfg改为zoo.cfg：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">cp zoo_sample.cfg zoo.cfg</div></pre></td></tr></table></figure>
+</li>
+<li><p>开启服务以及客户端连接<br>a)    进入/myzookeeper/zookeeper-3.4.9/bin路径下<br>b)    启动服务：<code>./zkServer.sh start</code><br>c)    停止服务：<code>./zkServer stop</code><br>d)    客户端连接：<code>./zkCli.sh</code><br>e)    客户端退出：<code>quit</code></p>
+</li>
+</ol>
+<h2 id="HelloWorld"><a href="#HelloWorld" class="headerlink" title="HelloWorld"></a>HelloWorld</h2><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;查看+获得zookeeper服务器上的数据存储信息，Zookeeper维护一个类似文件系统的数据结构。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="http://s1.wailian.download/2018/01/08/image54bc0.png" alt="image54bc0.png"></p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ZooKeeper数据模型的结构与Unix文件系统很类似，整体上可以看作是一棵树，每个节点称做一个Znode。很显然zookeeper集群自身维护了一套数据结构。这个存储结构是一个树形结构，其上的每一个节点，我们称之为”znode”，每一个znode默认能够存储1MB的数据，每个ZNode都可以通过其路径唯一标识。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="http://s1.wailian.download/2018/01/08/imagef5df3.png" alt="imagef5df3.png"></p>
+<p>#　数据模型Znode</p>
+<h2 id="数据模型"><a href="#数据模型" class="headerlink" title="数据模型"></a>数据模型</h2><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;zookeeper内部维护了一套类型UNIX的树形数据结构：由znode构成的集合，znode的集合又是一个树形结构，每一个znode又有很多属性进行描述。Znode维护了一个stat结构体，stat包含数据变化的版本号、访问控制列表变化、时间戳等等。版本号和时间戳一起可让Zookeeper验证缓存和协调更新。每次znode的数据发生了变化，版本号就增加。例如，无论何时客户端检索数据，它也一起检索数据的版本号。并且当客户端执行更新或删除时，客户端必须提供他正在改变的znode的版本号。如果它提供的版本号和真实的数据版本号不一致，更新将会失败。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="http://s1.wailian.download/2018/01/08/imageb8b4b.png" alt="imageb8b4b.png"></p>
+<h2 id="数据类型"><a href="#数据类型" class="headerlink" title="数据类型"></a>数据类型</h2><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="http://s1.wailian.download/2018/01/08/image408b2.png" alt="image408b2.png"><br>znode是由客户端创建的，它和创建它的客户端的内在联系，决定了它的存在性：</p>
+<ul>
+<li>PERSISTENT-持久化节点：创建这个节点的客户端在与zookeeper服务的连接断开后，这个节点也不会被删除（除非您使用API强制删除）。</li>
+<li>PERSISTENT_SEQUENTIAL-持久化顺序编号节点：当客户端请求创建这个节点A后，zookeeper会根据parent-znode的zxid状态，为这个A节点编写一个全目录唯一的编号（这个编号只会一直增长）。当客户端与zookeeper服务的连接断开后，这个节点也不会被删除。</li>
+<li>EPHEMERAL-临时目录节点：创建这个节点的客户端在与zookeeper服务的连接断开后，这个节点（还有涉及到的子节点）就会被删除。</li>
+<li>EPHEMERAL_SEQUENTIAL-临时顺序编号目录节点：当客户端请求创建这个节点A后，zookeeper会根据parent-znode的zxid状态，为这个A节点编写一个全目录唯一的编号（这个编号只会一直增长）。当创建这个节点的客户端与zookeeper服务的连接断开后，这个节点被删除。</li>
+<li>另外，无论是EPHEMERAL还是EPHEMERAL_SEQUENTIAL节点类型，在zookeeper的client异常终止后，节点也会被删除</li>
+</ul>
+<h2 id="基础命令"><a href="#基础命令" class="headerlink" title="基础命令"></a>基础命令</h2><h3 id="常用基础命令"><a href="#常用基础命令" class="headerlink" title="常用基础命令"></a>常用基础命令</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Zookeeper表现为一个分层的文件系统目录树结构,不同于文件系统之处在于：zk节点可以有自己的数据，而unix文件系统中的目录节点只有子节点。 <strong>一个节点对应一个应用，节点存储的数据就是应用需要的配置信息。</strong><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="http://s1.wailian.download/2018/01/08/image73822.png" alt="image73822.png"></p>
+<h3 id="四字命令"><a href="#四字命令" class="headerlink" title="四字命令"></a>四字命令</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;zookeeper支持某些特定的四字命令，他们大多是用来查询ZK服务的当前状态及相关信息的，通过telnet或nc向zookeeper提交相应命令，如：echo ruok | nc 127.0.0.1 2181<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;运行公式：<strong>echo 四字命令 | nc 主机IP zookeeper端口</strong><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="http://s1.wailian.download/2018/01/08/imagec508a.png" alt="imagec508a.png"></p>
+<h1 id="Java-Client"><a href="#Java-Client" class="headerlink" title="Java Client"></a>Java Client</h1><p>请参考：<a href="https://github.com/liuzhongpo/af-learning/tree/master/08-zookeeper" target="_blank" rel="external">https://github.com/liuzhongpo/af-learning/tree/master/08-zookeeper</a></p>
+<h1 id="通知机制"><a href="#通知机制" class="headerlink" title="通知机制"></a>通知机制</h1><h2 id="session"><a href="#session" class="headerlink" title="session"></a>session</h2><p>客户端使用某种语言绑定创建一个到服务的句柄时，就建立了一个ZooKeeper会话。会话创建后，句柄处于CONNECTING状态，客户端库会试图连接到组成ZooKeeper服务的某个服务器；连接成功则进入到CONNECTED状态。通常操作中句柄将处于这两个状态之一。如果发生不可恢复的错误，如会话过期、身份鉴定失败，或者应用显式关闭，则句柄进入到CLOSED状态。下图显式了ZooKeeper客户端可能的状态转换：<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="http://s1.wailian.download/2018/01/08/image63f03.png" alt="image63f03.png"></p>
+<h2 id="watch"><a href="#watch" class="headerlink" title="watch"></a>watch</h2><h3 id="通知机制-1"><a href="#通知机制-1" class="headerlink" title="通知机制"></a>通知机制</h3><ul>
+<li>通知机制：客户端注册监听它关心的目录节点，当目录节点发生变化（数据改变、被删除、子目录节点增加删除）时，zookeeper会通知客户端。是一种 异步回调的触发机制。</li>
+<li>ZooKeeper 支持watch(观察)的概念。客户端可以在每个znode结点上设置一个观察。如果被观察服务端的znode结点有变更，那么watch就会被触发，这个watch所属的客户端将接收到一个通知包被告知结点已经发生变化，把相应的事件通知给设置Watcher的Client端。</li>
+<li>Zookeeper里的所有读取操作：getData(),getChildren()和exists()都有设置watch的选项</li>
+</ul>
+<h3 id="watch事件理解"><a href="#watch事件理解" class="headerlink" title="watch事件理解"></a>watch事件理解</h3><ul>
+<li>一次触发<br>当数据有了变化时zkserver向客户端发送一个watch,它是一次性的动作，即触发一次就不再有效，类似一次性纸杯。只监控一次。如果想继续Watch的话，需要客户端重新设置Watcher。因此如果你得到一个watch事件且想在将来的变化得到通知，必须新设置另一个watch。</li>
+<li>发往客户端<br>Watches是异步发往客户端的，Zookeeper提供一个顺序保证：在看到watch事件之前绝不会看到变化，这样不同客户端看到的是一致性的顺序。<br>   在（导致观察事件被触发的）修改操作的成功返回码到达客户端之前，事件可能在去往客户端的路上，但是可能不会到达客户端。观察事件是异步地发送给观察者（客户端）的。ZooKeeper会保证次序：在收到观察事件之前，客户端不会看到已经为之设置观察的节点的改动。网络延迟或者其他因素可能会让不同的客户端在不同的时间收到观察事件和更新操作的返回码。这里的要点是：不同客户端看到的事情都有一致的次序。</li>
+<li>为数据设置watch<br>节点有不同的改动方式。可以认为ZooKeeper维护两个观察列表：数据观察和子节点观察。getData()和exists()设置数据观察。getChildren()设置子节点观察。此外，还可以认为不同的返回数据有不同的观察。getData()和exists()返回节点的数据，而getChildren()返回子节点列表。所以，setData()将为znode触发数据观察。成功的create()将为新创建的节点触发数据观察，为其父节点触发子节点观察。成功的delete()将会为被删除的节点触发数据观察以及子节点观察（因为节点不能再有子节点了），为其父节点触发子节点观察。<br>观察维护在客户端连接到的ZooKeeper服 务器中。这让观察的设置、维护和分发是轻量级的。客户端连接到新的服务器时，所有会话事件将被触发。同服务器断开连接期间不会收到观察。客户端重新连接 时，如果需要，先前已经注册的观察将被重新注册和触发。通常这都是透明的。有一种情况下观察事件将丢失：对还没有创建的节点设置存在观察，而在断开连接期 间创建节点，然后删除。</li>
+<li>时序性和一致性<br>Watches是在client连接到Zookeeper服务端的本地维护，这可让watches成为轻量的，可维护的和派发的。当一个client连接到新server，watch将会触发任何session事件，断开连接后不能接收到。当客户端重连，先前注册的watches将会被重新注册并触发。<br>关于watches，Zookeeper维护这些保证：<br>（1）Watches和其他事件、watches和异步恢复都是有序的。Zookeeper客户端保证每件事都是有序派发<br>（2）客户端在看到新数据之前先看到watch事件<br>（3）对应更新顺序的watches事件顺序由Zookeeper服务所见</li>
+</ul>
+
+      
+    </div>
+    
+  </div>
+  
+    
+    <div class="copyright">
+        <p><span>本文标题:</span><a href="/2018/01/08/【zookeeper】基础知识以及操作/">【zookeeper】基础知识及操作</a></p>
+        <p><span>文章作者:</span><a href="/" title="回到主页">lzp</a></p>
+        <p><span>发布时间:</span>2018-01-08, 00:00:00</p>
+        <p><span>最后更新:</span>2018-01-08, 11:22:45</p>
+        <p>
+            <span>原始链接:</span><a class="post-url" href="/2018/01/08/【zookeeper】基础知识以及操作/" title="【zookeeper】基础知识及操作">https://liuzhongpo.github.io/2018/01/08/【zookeeper】基础知识以及操作/</a>
+            <span class="copy-path" data-clipboard-text="原文: https://liuzhongpo.github.io/2018/01/08/【zookeeper】基础知识以及操作/　　作者: lzp" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <script> var clipboard = new Clipboard('.copy-path'); </script>
+        </p>
+        <p>
+            <span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
+        </p>
+    </div>
+
+
+
+    <nav id="article-nav">
+        
+        
+            <div id="article-nav-older" class="article-nav-title">
+                <a href="/2017/12/12/【设计模式】单例模式/">
+                    【设计模式】单例模式
+                </a>
+            </div>
+        
+    </nav>
+
+  
+</article>
+
+    <div id="toc" class="toc-article">
+        <strong class="toc-title">文章目录</strong>
+        
+            <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#是什么？"><span class="toc-number">1.</span> <span class="toc-text">是什么？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#安装配置"><span class="toc-number">2.</span> <span class="toc-text">安装配置</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#linux下安装"><span class="toc-number">2.1.</span> <span class="toc-text">linux下安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HelloWorld"><span class="toc-number">2.2.</span> <span class="toc-text">HelloWorld</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#数据模型"><span class="toc-number">2.3.</span> <span class="toc-text">数据模型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#数据类型"><span class="toc-number">2.4.</span> <span class="toc-text">数据类型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#基础命令"><span class="toc-number">2.5.</span> <span class="toc-text">基础命令</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#常用基础命令"><span class="toc-number">2.5.1.</span> <span class="toc-text">常用基础命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#四字命令"><span class="toc-number">2.5.2.</span> <span class="toc-text">四字命令</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Java-Client"><span class="toc-number">3.</span> <span class="toc-text">Java Client</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#通知机制"><span class="toc-number">4.</span> <span class="toc-text">通知机制</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#session"><span class="toc-number">4.1.</span> <span class="toc-text">session</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#watch"><span class="toc-number">4.2.</span> <span class="toc-text">watch</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#通知机制-1"><span class="toc-number">4.2.1.</span> <span class="toc-text">通知机制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#watch事件理解"><span class="toc-number">4.2.2.</span> <span class="toc-text">watch事件理解</span></a></li></ol></li></ol></li></ol>
+        
+    </div>
+    <style>
+        .left-col .switch-btn,
+        .left-col .switch-area {
+            display: none;
+        }
+        .toc-level-3 i,
+        .toc-level-3 ol {
+            display: none !important;
+        }
+    </style>
+
+    <input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">
+
+    <script>
+        yiliaConfig.toc = ["隐藏目录", "显示目录", !!"false"];
+    </script>
+
+
+
+    
+<div class="share">
+    
+        <div class="bdsharebuttonbox">
+            <a href="#" class="fa fa-twitter bds_twi" data-cmd="twi" title="分享到推特"></a>
+            <a href="#" class="fa fa-weibo bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+            <a href="#" class="fa fa-qq bds_sqq" data-cmd="sqq" title="分享给 QQ 好友"></a>
+            <a href="#" class="fa fa-files-o bds_copy" data-cmd="copy" title="复制网址"></a>
+            <a href="#" class="fa fa fa-envelope-o bds_mail" data-cmd="mail" title="通过邮件分享"></a>
+            <a href="#" class="fa fa-weixin bds_weixin" data-cmd="weixin" title="生成文章二维码"></a>
+            <a href="#" class="fa fa-share-alt bds_more" data-cmd="more"></i></a>
+        </div>
+        <script>
+            window._bd_share_config={
+                "common":{"bdSnsKey":{},"bdText":"【zookeeper】基础知识及操作　| LZP BLOG　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+        </script>
+    
+
+    
+</div>
+
+
+
+
+
+
+
+    
+        <section class="youyan" id="comments">
+    <script>
+        var loadComment = function(){
+            var d = document, s = d.createElement('script');
+            s.src = 'http://v2.uyan.cc/code/uyan.js?uid=2144710';
+            (d.head || d.body).appendChild(s);
+        }
+    </script>
+    
+    <script> loadComment(); </script>
+
+    <div id="uyan_frame"></div>
+</section>
+    
+
+
+
+
+    <div class="scroll" id="post-nav-button">
+        
+            <a href="/" title="回到主页"><i class="fa fa-home"></i></a>
+        
+
+        <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
+
+        
+            <a href="/2017/12/12/【设计模式】单例模式/" title="下一篇: 【设计模式】单例模式">
+                <i class="fa fa-angle-right"></i>
+            </a>
+        
+    </div>
+
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2018/01/08/【zookeeper】基础知识以及操作/">【zookeeper】基础知识及操作</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/12/【设计模式】单例模式/">【设计模式】单例模式</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/12/【技术杂技】lombok/">【技术杂技】Lombok</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/10/线程创建的4种方式/">线程创建的4种方式</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/29/Netty笔记(一)：Hello Netty/">【Netty】Hello Netty</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/28/volatile关键字/">volatile关键字</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/21/Java synchronized关键字/">synchronized关键字</a></li></ul>
+
+
+
+
+    <script>
+        
+    </script>
+</div>
+      <footer id="footer">
+    <div class="outer">
+        <div id="footer-info">
+            <div class="footer-left">
+                <i class="fa fa-copyright"></i> 
+                2017-2018 lzp
+            </div>
+            <div class="footer-right">
+                愿清澈如莲，愿自由如风，愿爱如少年
+            </div>
+        </div>
+        
+            <div class="visit">
+                
+                    <span id="busuanzi_container_site_pv" style='display:none'>
+                        <span id="site-visit" title="本站到访数"><i class="fa fa-user" aria-hidden="true"></i><span id="busuanzi_value_site_uv"></span>
+                        </span>
+                    </span>
+                
+                
+                    <span>| </span>
+                
+                
+                    <span id="busuanzi_container_page_pv" style='display:none'>
+                        <span id="page-visit"  title="本页阅读量"><i class="fa fa-eye animated infinite pulse" aria-hidden="true"></i><span id="busuanzi_value_page_pv"></span>
+                        </span>
+                    </span>
+                
+            </div>
+        
+    </div>
+</footer>
+    </div>
+    
+<script data-main="/js/main.js" src="//cdn.bootcss.com/require.js/2.2.0/require.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            var iPad = window.navigator.userAgent.indexOf('iPad');
+            if (iPad > -1 || $(".left-col").css("display") === "none") {
+                var bgColorList = ["#9db3f4", "#414141", "#e5a859", "#f5dfc6", "#c084a0", "#847e72", "#cd8390", "#996731"];
+                var bgColor = Math.ceil(Math.random() * (bgColorList.length - 1));
+                $("body").css({"background-color": bgColorList[bgColor], "background-size": "cover"});
+            }
+            else {
+                var backgroundnum = 1;
+                var backgroundimg = "url(/background/bg-x.jpg)".replace(/x/gi, Math.ceil(Math.random() * backgroundnum));
+                $("body").css({"background": backgroundimg, "background-attachment": "fixed", "background-size": "cover"});
+            }
+        })
+    </script>
+
+
+
+
+
+<div class="scroll" id="scroll">
+    <a href="#" title="返回顶部"><i class="fa fa-arrow-up"></i></a>
+    <a href="#comments" onclick="load$hide();" title="查看评论"><i class="fa fa-comments-o"></i></a>
+    <a href="#footer" title="转到底部"><i class="fa fa-arrow-down"></i></a>
+</div>
+<script>
+    // Open in New Window
+    
+        var oOpenInNew = {
+            
+             title: "a.article-title, .article-more-link a", 
+             post: ".article-entry a[href], .copyright a[href]", 
+             tags: ".article-tag a", 
+            
+            
+             archives: ".archive-article-title", 
+             miniArchives: "a.post-list-link", 
+            
+             friends: "#js-friends a", 
+             socail: ".social a" 
+        }
+        for (var x in oOpenInNew) {
+            $(oOpenInNew[x]).attr("target", "_blank");
+        }
+    
+</script>
+
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+  </div>
+</body>
+</html>
