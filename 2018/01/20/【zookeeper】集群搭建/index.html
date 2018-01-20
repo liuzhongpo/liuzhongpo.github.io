@@ -15,17 +15,21 @@
 
 
 
-<meta name="description" content="愿清澈如莲，愿自由如风，愿爱如少年">
-<meta property="og:type" content="website">
-<meta property="og:title" content="分类+标签">
-<meta property="og:url" content="https://liuzhongpo.github.io/tags/index.html">
+<meta name="description" content="zookeeper集群搭建。">
+<meta name="keywords" content="zookeeper">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【zookeeper】集群搭建">
+<meta property="og:url" content="https://liuzhongpo.github.io/2018/01/20/【zookeeper】集群搭建/index.html">
 <meta property="og:site_name" content="LZP BLOG">
-<meta property="og:description" content="愿清澈如莲，愿自由如风，愿爱如少年">
+<meta property="og:description" content="zookeeper集群搭建。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-09-16T09:33:44.472Z">
+<meta property="og:image" content="http://s1.wailian.download/2018/01/20/image.png">
+<meta property="og:image" content="http://s1.wailian.download/2018/01/20/image650e2.png">
+<meta property="og:updated_time" content="2018-01-20T10:14:58.953Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="分类+标签">
-<meta name="twitter:description" content="愿清澈如莲，愿自由如风，愿爱如少年">
+<meta name="twitter:title" content="【zookeeper】集群搭建">
+<meta name="twitter:description" content="zookeeper集群搭建。">
+<meta name="twitter:image" content="http://s1.wailian.download/2018/01/20/image.png">
 
 <link rel="apple-touch-icon" href= "/apple-touch-icon.png">
 
@@ -55,7 +59,7 @@
 <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
 
 
-<title>分类+标签 | LZP BLOG</title>
+<title>【zookeeper】集群搭建 | LZP BLOG</title>
 
 <script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
 <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
@@ -65,7 +69,7 @@
         fancybox: true,
         animate: false,
         isHome: false,
-        isPost: false,
+        isPost: true,
         isArchive: false,
         isTag: false,
         isCategory: false,
@@ -257,11 +261,11 @@
     </div>
     <link class="menu-list" tags="标签" friends="友情链接" about="关于我"/>
 </nav>
-      <div class="body-wrap"><article id="page-" class="article article-type-page" itemscope itemprop="blogPost">
+      <div class="body-wrap"><article id="post-【zookeeper】集群搭建" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/tags/index.html" class="article-date">
-      <time datetime="2017-09-13T22:18:59.000Z" itemprop="datePublished">2017-09-14</time>
+      <a href="/2018/01/20/【zookeeper】集群搭建/" class="article-date">
+      <time datetime="2018-01-19T16:00:00.000Z" itemprop="datePublished">2018-01-20</time>
 </a>
 
 
@@ -276,7 +280,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      分类+标签
+      【zookeeper】集群搭建
     </h1>
   
 
@@ -284,8 +288,16 @@
       
       <div class="article-info article-info-post">
         
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/zookeeper/">zookeeper</a>
+    </div>
+
 
         
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/zookeeper/">zookeeper</a></li></ul>
+    </div>
+
         <div class="clearfix"></div>
       </div>
       
@@ -293,96 +305,107 @@
     <div class="article-entry" itemprop="articleBody">
       
           
-              <style>
-    .article-meta { display: none; }
-    #container .article .article-title { padding-right: 0; }
-    .article-header {
-        padding: 0;
-        padding-top: 26px;
-        border-left: none;
-        text-align: center;
-    }
-    .article-header:hover { border-left: none; }
-    .article-title { font-size: 1.6em }
-    .article-entry hr { margin: 0;}
-    .article-meta,
-    #container .article-info-post.article-info { display: none;}
-    #container .article .article-title { padding: 0; }
-</style>
+        <ul>
+<li>前提条件：3台虚拟机，zookeeper压缩包</li>
+</ul>
+<h1 id="搭建步骤"><a href="#搭建步骤" class="headerlink" title="搭建步骤"></a>搭建步骤</h1><p>以下流程，在集群的机器上都做一遍。<br>1、在zookeeper下创建mydata文件夹<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mkdir mydata</div></pre></td></tr></table></figure></p>
+<p>2、进入 zookeeper下的conf文件夹，新建 zoo.cfg文件（拷贝zoo_sample.cfg）<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">cp zoo_sample.cfg zoo.cfg</div></pre></td></tr></table></figure></p>
+<p>3、编辑zoo.cfg<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">vim zoo.cfg</div></pre></td></tr></table></figure></p>
+<ul>
+<li>修改datadir为前面mydata的路径，可以利用pwd查看</li>
+<li>在最后面添加server的列表<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">server.0=192.168.40.40:2008:6008  </div><div class="line">server.1=192.168.40.41:2008:6008  </div><div class="line">server.2=192.168.40.42:2008:6008</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>4、在各自mydata下面创建myid的文件，在里面写入server的数字(根据ip对应的server.?的?)<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">vim myid</div></pre></td></tr></table></figure></p>
+<p>5、启动zookeeper</p>
+<ul>
+<li>启动命令：</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">./zkServer.sh start</div></pre></td></tr></table></figure>
+<ul>
+<li>查看状态：</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">/zkServer.sh status</div></pre></td></tr></table></figure>
+<p><img src="http://s1.wailian.download/2018/01/20/image.png" alt="image.png"><br><img src="http://s1.wailian.download/2018/01/20/image650e2.png" alt="image650e2.png"></p>
+<h1 id="server列表解释"><a href="#server列表解释" class="headerlink" title="server列表解释"></a>server列表解释</h1><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;服务器名称与地址：集群信息（服务器编号，服务器地址，LF通信端口，选举端口）。这个配置项的书写格式比较特殊，规则如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">server.N=YYY:A:B</div></pre></td></tr></table></figure></p>
+<ul>
+<li>N表示服务器编号</li>
+<li>YYY表示服务器的IP地址</li>
+<li>A为LF通信端口，表示该服务器与集群中的leader交换的信息的端口</li>
+<li>B为选举端口，表示选举新leader时服务器间相互通信的端口（当leader挂掉时，其余服务器会相互通信，选择出新的leader）</li>
+</ul>
+<h1 id="zookeeper异常"><a href="#zookeeper异常" class="headerlink" title="zookeeper异常"></a>zookeeper异常</h1><p>Zookeeper启动异常：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Error contacting service. It is probably not running.</div></pre></td></tr></table></figure></p>
+<p>可能原因：</p>
+<ol>
+<li>重试几次，要是还失败，就可能是下面的原因</li>
+<li>zoo.cfg配置文件有问题</li>
+<li>zoo.cfg配置文件中指定目录却没有创建！ 创建相应目录即可。</li>
+<li><p>zoo.cfg中dataDir指定路径为myid文件的路径。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">myid内容与：server.?=localhost:2888:3888 中你所设置？一致！</div></pre></td></tr></table></figure>
+</li>
+<li><p>使用<code>service iptables stop</code> 关闭防火墙,使用<code>service iptables status</code>确认</p>
+</li>
+</ol>
 
-
-    <!-- Tag Cloud Page -->
-    <hr>
-<br>
-<ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Netty-Mina/">Netty&Mina</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/zookeeper/">zookeeper</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/多线程/">多线程</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/技术杂技/">技术杂技</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/设计模式/">设计模式</a><span class="category-list-count">1</span></li></ul>
-
-<p class="count"></p>
-
-<div class="tags">
-    <a href="/tags/Netty/" style="font-size: 16px; color: #808080">Netty</a> <a href="/tags/synchronized/" style="font-size: 16px; color: #808080">synchronized</a> <a href="/tags/tool/" style="font-size: 16px; color: #808080">tool</a> <a href="/tags/volatile/" style="font-size: 16px; color: #808080">volatile</a> <a href="/tags/zookeeper/" style="font-size: 25.5px; color: #404040">zookeeper</a> <a href="/tags/多线程/" style="font-size: 35px; color: #000">多线程</a> <a href="/tags/技术杂技/" style="font-size: 16px; color: #808080">技术杂技</a> <a href="/tags/服务器/" style="font-size: 16px; color: #808080">服务器</a> <a href="/tags/设计模式/" style="font-size: 16px; color: #808080">设计模式</a>
-</div>
-<style>
-    .category-list li{
-        display: inline-block;
-        margin: 0 1em .5em 0;
-        padding: 4px;
-        border: 1px solid lightgray;
-        font-size: 1.2rem;
-    }
-    .category-list a { color: gray; }
-    .category-list-item:hover a {
-        color: gray;
-        text-decoration: none;
-    }
-    .category-list-count {
-        margin-left: 2px;
-        font-size: .9rem;
-    }
-    .article-entry ul li:before{ display: none; }
-    .article-inner { text-align: center; }
-    .tags {
-        max-width: 42em;
-        margin: 2em auto;
-        margin-top: 0em;
-    }
-    .tags a {
-        margin-right: 1em;
-        line-height: 65px;
-        border-bottom: 1px solid gray;
-        white-space: nowrap;
-        transition: border-bottom .5s;
-    }
-    .tags a:hover {
-        border-bottom: 3px dotted gray;
-        text-decoration: none;
-    }
-    #count > span {
-        margin: auto .2em;
-        font-weight: bold;
-    }
-</style>
-
-<!-- Count tags and categories -->
-<p id="count">
-        已有<span><script>document.write($(".category-list-item").length)</script></span>个分类，
-        共计<span><script>document.write($(".tags > a").length)</script></span>个标签
-</p>
-<script>
-    $('#count').appendTo('.count');
-</script>
-
-          
-        
       
     </div>
     
   </div>
   
     
+    <div class="copyright">
+        <p><span>本文标题:</span><a href="/2018/01/20/【zookeeper】集群搭建/">【zookeeper】集群搭建</a></p>
+        <p><span>文章作者:</span><a href="/" title="回到主页">lzp</a></p>
+        <p><span>发布时间:</span>2018-01-20, 00:00:00</p>
+        <p><span>最后更新:</span>2018-01-20, 18:14:58</p>
+        <p>
+            <span>原始链接:</span><a class="post-url" href="/2018/01/20/【zookeeper】集群搭建/" title="【zookeeper】集群搭建">https://liuzhongpo.github.io/2018/01/20/【zookeeper】集群搭建/</a>
+            <span class="copy-path" data-clipboard-text="原文: https://liuzhongpo.github.io/2018/01/20/【zookeeper】集群搭建/　　作者: lzp" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <script> var clipboard = new Clipboard('.copy-path'); </script>
+        </p>
+        <p>
+            <span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
+        </p>
+    </div>
 
+
+
+    <nav id="article-nav">
+        
+        
+            <div id="article-nav-older" class="article-nav-title">
+                <a href="/2018/01/08/【zookeeper】基础知识以及操作/">
+                    【zookeeper】基础知识及操作
+                </a>
+            </div>
+        
+    </nav>
 
   
 </article>
+
+    <div id="toc" class="toc-article">
+        <strong class="toc-title">文章目录</strong>
+        
+            <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#搭建步骤"><span class="toc-number">1.</span> <span class="toc-text">搭建步骤</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#server列表解释"><span class="toc-number">2.</span> <span class="toc-text">server列表解释</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#zookeeper异常"><span class="toc-number">3.</span> <span class="toc-text">zookeeper异常</span></a></li></ol>
+        
+    </div>
+    <style>
+        .left-col .switch-btn,
+        .left-col .switch-area {
+            display: none;
+        }
+        .toc-level-3 i,
+        .toc-level-3 ol {
+            display: none !important;
+        }
+    </style>
+
+    <input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">
+
+    <script>
+        yiliaConfig.toc = ["隐藏目录", "显示目录", !!"false"];
+    </script>
 
 
 
@@ -400,7 +423,7 @@
         </div>
         <script>
             window._bd_share_config={
-                "common":{"bdSnsKey":{},"bdText":"分类+标签　| LZP BLOG　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+                "common":{"bdSnsKey":{},"bdText":"【zookeeper】集群搭建　| LZP BLOG　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
         </script>
     
 
@@ -413,6 +436,40 @@
 
 
 
+    
+        <section class="youyan" id="comments">
+    <script>
+        var loadComment = function(){
+            var d = document, s = d.createElement('script');
+            s.src = 'http://v2.uyan.cc/code/uyan.js?uid=2144710';
+            (d.head || d.body).appendChild(s);
+        }
+    </script>
+    
+    <script> loadComment(); </script>
+
+    <div id="uyan_frame"></div>
+</section>
+    
+
+
+
+
+    <div class="scroll" id="post-nav-button">
+        
+            <a href="/" title="回到主页"><i class="fa fa-home"></i></a>
+        
+
+        <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
+
+        
+            <a href="/2018/01/08/【zookeeper】基础知识以及操作/" title="下一篇: 【zookeeper】基础知识及操作">
+                <i class="fa fa-angle-right"></i>
+            </a>
+        
+    </div>
+
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2018/01/20/【zookeeper】集群搭建/">【zookeeper】集群搭建</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/08/【zookeeper】基础知识以及操作/">【zookeeper】基础知识及操作</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/12/【设计模式】单例模式/">【设计模式】单例模式</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/12/【技术杂技】lombok/">【技术杂技】Lombok</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/10/线程创建的4种方式/">线程创建的4种方式</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/29/Netty笔记(一)：Hello Netty/">【Netty】Hello Netty</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/28/volatile关键字/">volatile关键字</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/21/Java synchronized关键字/">synchronized关键字</a></li></ul>
 
 
 

@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://liuzhongpo.github.io/"/>
-  <updated>2018-01-08T03:25:26.066Z</updated>
+  <updated>2018-01-20T10:14:58.953Z</updated>
   <id>https://liuzhongpo.github.io/</id>
   
   <author>
@@ -15,6 +15,28 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>【zookeeper】集群搭建</title>
+    <link href="https://liuzhongpo.github.io/2018/01/20/%E3%80%90zookeeper%E3%80%91%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA/"/>
+    <id>https://liuzhongpo.github.io/2018/01/20/【zookeeper】集群搭建/</id>
+    <published>2018-01-19T16:00:00.000Z</published>
+    <updated>2018-01-20T10:14:58.953Z</updated>
+    
+    <content type="html"><![CDATA[<ul><li>前提条件：3台虚拟机，zookeeper压缩包</li></ul><h1 id="搭建步骤"><a href="#搭建步骤" class="headerlink" title="搭建步骤"></a>搭建步骤</h1><p>以下流程，在集群的机器上都做一遍。<br>1、在zookeeper下创建mydata文件夹<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mkdir mydata</div></pre></td></tr></table></figure></p><p>2、进入 zookeeper下的conf文件夹，新建 zoo.cfg文件（拷贝zoo_sample.cfg）<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">cp zoo_sample.cfg zoo.cfg</div></pre></td></tr></table></figure></p><p>3、编辑zoo.cfg<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">vim zoo.cfg</div></pre></td></tr></table></figure></p><ul><li>修改datadir为前面mydata的路径，可以利用pwd查看</li><li>在最后面添加server的列表<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">server.0=192.168.40.40:2008:6008  </div><div class="line">server.1=192.168.40.41:2008:6008  </div><div class="line">server.2=192.168.40.42:2008:6008</div></pre></td></tr></table></figure></li></ul><p>4、在各自mydata下面创建myid的文件，在里面写入server的数字(根据ip对应的server.?的?)<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">vim myid</div></pre></td></tr></table></figure></p><p>5、启动zookeeper</p><ul><li>启动命令：</li></ul><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">./zkServer.sh start</div></pre></td></tr></table></figure><ul><li>查看状态：</li></ul><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">/zkServer.sh status</div></pre></td></tr></table></figure><p><img src="http://s1.wailian.download/2018/01/20/image.png" alt="image.png"><br><img src="http://s1.wailian.download/2018/01/20/image650e2.png" alt="image650e2.png"></p><h1 id="server列表解释"><a href="#server列表解释" class="headerlink" title="server列表解释"></a>server列表解释</h1><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;服务器名称与地址：集群信息（服务器编号，服务器地址，LF通信端口，选举端口）。这个配置项的书写格式比较特殊，规则如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">server.N=YYY:A:B</div></pre></td></tr></table></figure></p><ul><li>N表示服务器编号</li><li>YYY表示服务器的IP地址</li><li>A为LF通信端口，表示该服务器与集群中的leader交换的信息的端口</li><li>B为选举端口，表示选举新leader时服务器间相互通信的端口（当leader挂掉时，其余服务器会相互通信，选择出新的leader）</li></ul><h1 id="zookeeper异常"><a href="#zookeeper异常" class="headerlink" title="zookeeper异常"></a>zookeeper异常</h1><p>Zookeeper启动异常：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Error contacting service. It is probably not running.</div></pre></td></tr></table></figure></p><p>可能原因：</p><ol><li>重试几次，要是还失败，就可能是下面的原因</li><li>zoo.cfg配置文件有问题</li><li>zoo.cfg配置文件中指定目录却没有创建！ 创建相应目录即可。</li><li><p>zoo.cfg中dataDir指定路径为myid文件的路径。</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">myid内容与：server.?=localhost:2888:3888 中你所设置？一致！</div></pre></td></tr></table></figure></li><li><p>使用<code>service iptables stop</code> 关闭防火墙,使用<code>service iptables status</code>确认</p></li></ol>]]></content>
+    
+    <summary type="html">
+    
+      zookeeper集群搭建。
+    
+    </summary>
+    
+      <category term="zookeeper" scheme="https://liuzhongpo.github.io/categories/zookeeper/"/>
+    
+    
+      <category term="zookeeper" scheme="https://liuzhongpo.github.io/tags/zookeeper/"/>
+    
+  </entry>
   
   <entry>
     <title>【zookeeper】基础知识及操作</title>
