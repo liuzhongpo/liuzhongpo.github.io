@@ -65,7 +65,9 @@
             
             <tag> zookeeper </tag>
             
-            <tag> Curator，分布式锁 </tag>
+            <tag> Curator </tag>
+            
+            <tag> 分布式锁 </tag>
             
         </tags>
         
