@@ -24,7 +24,7 @@
 <meta property="og:description" content="安装单机版的Redis。最近接触了很多redis场景和配置，碰到很多生产和测试环境的各种问题，现在来重现以及解决。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://www.wailian.work/images/2018/01/31/image.png">
-<meta property="og:updated_time" content="2018-01-31T06:17:08.957Z">
+<meta property="og:updated_time" content="2018-01-31T06:18:39.028Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="【Redis】安装单机版Redis">
 <meta name="twitter:description" content="安装单机版的Redis。最近接触了很多redis场景和配置，碰到很多生产和测试环境的各种问题，现在来重现以及解决。">
@@ -304,10 +304,10 @@
     <div class="article-entry" itemprop="articleBody">
       
           
-        <p>官网下载redis安装包，这里使用：redis-3.2.8.tar.gz。安装在<strong>/usr/local</strong>下。</p>
+        <p>官网下载redis安装包，这里使用：<code>redis-3.2.8.tar.gz</code>。安装在<strong>/usr/local</strong>下。</p>
 <h1 id="安装-tcl"><a href="#安装-tcl" class="headerlink" title="安装 tcl"></a>安装 tcl</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">wget http://downloads.sourceforge.net/tcl/tcl8.6.1-src.tar.gz</div><div class="line">tar -xzvf tcl8.6.1-src.tar.gz</div><div class="line">cd  /usr/local/tcl8.6.1/unix/</div><div class="line">./configure  </div><div class="line">make &amp;&amp; make install</div></pre></td></tr></table></figure>
 <h1 id="安装Redis"><a href="#安装Redis" class="headerlink" title="安装Redis"></a>安装Redis</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">tar -zxvf redis-3.2.8.tar.gz</div><div class="line">cd redis-3.2.8</div><div class="line">make </div><div class="line">make test</div><div class="line">make install</div></pre></td></tr></table></figure>
-<h1 id="问题解决"><a href="#问题解决" class="headerlink" title="问题解决"></a>问题解决</h1><h2 id="make出错"><a href="#make出错" class="headerlink" title="make出错"></a>make出错</h2><p>解决办法：安装gcc<br>步骤：</p>
+<h1 id="问题解决"><a href="#问题解决" class="headerlink" title="问题解决"></a>问题解决</h1><h2 id="make出错"><a href="#make出错" class="headerlink" title="make出错"></a>make出错</h2><p>解决办法：<strong>安装gcc</strong><br>步骤：</p>
 <ul>
 <li>能上网：</li>
 </ul>
@@ -328,7 +328,7 @@
         <p><span>本文标题:</span><a href="/2018/01/31/【Redis】安装单机版Redis/">【Redis】安装单机版Redis</a></p>
         <p><span>文章作者:</span><a href="/" title="回到主页">lzp</a></p>
         <p><span>发布时间:</span>2018-01-31, 00:00:00</p>
-        <p><span>最后更新:</span>2018-01-31, 14:17:08</p>
+        <p><span>最后更新:</span>2018-01-31, 14:18:39</p>
         <p>
             <span>原始链接:</span><a class="post-url" href="/2018/01/31/【Redis】安装单机版Redis/" title="【Redis】安装单机版Redis">https://liuzhongpo.github.io/2018/01/31/【Redis】安装单机版Redis/</a>
             <span class="copy-path" data-clipboard-text="原文: https://liuzhongpo.github.io/2018/01/31/【Redis】安装单机版Redis/　　作者: lzp" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
