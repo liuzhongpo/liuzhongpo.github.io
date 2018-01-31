@@ -15,21 +15,20 @@
 
 
 
-<meta name="description" content="zookeeper集群搭建。">
-<meta name="keywords" content="zookeeper">
+<meta name="description" content="安装单机版的Redis。最近接触了很多redis场景和配置，碰到很多生产和测试环境的各种问题，现在来重现以及解决。">
+<meta name="keywords" content="redis,CentOS">
 <meta property="og:type" content="article">
-<meta property="og:title" content="【zookeeper】集群搭建">
-<meta property="og:url" content="https://liuzhongpo.github.io/2018/01/20/【zookeeper】集群搭建/index.html">
+<meta property="og:title" content="【Redis】安装单机版Redis">
+<meta property="og:url" content="https://liuzhongpo.github.io/2018/01/31/【Redis】安装单机版Redis/index.html">
 <meta property="og:site_name" content="LZP BLOG">
-<meta property="og:description" content="zookeeper集群搭建。">
+<meta property="og:description" content="安装单机版的Redis。最近接触了很多redis场景和配置，碰到很多生产和测试环境的各种问题，现在来重现以及解决。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://s1.wailian.download/2018/01/20/image.png">
-<meta property="og:image" content="http://s1.wailian.download/2018/01/20/image650e2.png">
-<meta property="og:updated_time" content="2018-01-20T10:14:58.953Z">
+<meta property="og:image" content="http://www.wailian.work/images/2018/01/31/image.png">
+<meta property="og:updated_time" content="2018-01-31T05:44:42.836Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="【zookeeper】集群搭建">
-<meta name="twitter:description" content="zookeeper集群搭建。">
-<meta name="twitter:image" content="http://s1.wailian.download/2018/01/20/image.png">
+<meta name="twitter:title" content="【Redis】安装单机版Redis">
+<meta name="twitter:description" content="安装单机版的Redis。最近接触了很多redis场景和配置，碰到很多生产和测试环境的各种问题，现在来重现以及解决。">
+<meta name="twitter:image" content="http://www.wailian.work/images/2018/01/31/image.png">
 
 <link rel="apple-touch-icon" href= "/apple-touch-icon.png">
 
@@ -59,7 +58,7 @@
 <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
 
 
-<title>【zookeeper】集群搭建 | LZP BLOG</title>
+<title>【Redis】安装单机版Redis | LZP BLOG</title>
 
 <script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
 <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
@@ -261,11 +260,11 @@
     </div>
     <link class="menu-list" tags="标签" friends="友情链接" about="关于我"/>
 </nav>
-      <div class="body-wrap"><article id="post-【zookeeper】集群搭建" class="article article-type-post" itemscope itemprop="blogPost">
+      <div class="body-wrap"><article id="post-【Redis】安装单机版Redis" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2018/01/20/【zookeeper】集群搭建/" class="article-date">
-      <time datetime="2018-01-19T16:00:00.000Z" itemprop="datePublished">2018-01-20</time>
+      <a href="/2018/01/31/【Redis】安装单机版Redis/" class="article-date">
+      <time datetime="2018-01-30T16:00:00.000Z" itemprop="datePublished">2018-01-31</time>
 </a>
 
 
@@ -280,7 +279,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      【zookeeper】集群搭建
+      【Redis】安装单机版Redis
     </h1>
   
 
@@ -289,13 +288,13 @@
       <div class="article-info article-info-post">
         
     <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/zookeeper/">zookeeper</a>
+    <a class="article-category-link" href="/categories/redis/">redis</a>
     </div>
 
 
         
     <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/zookeeper/">zookeeper</a></li></ul>
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CentOS/">CentOS</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/redis/">redis</a></li></ul>
     </div>
 
         <div class="clearfix"></div>
@@ -305,47 +304,19 @@
     <div class="article-entry" itemprop="articleBody">
       
           
-        <ul>
-<li>前提条件：3台虚拟机，zookeeper压缩包</li>
-</ul>
-<h1 id="搭建步骤"><a href="#搭建步骤" class="headerlink" title="搭建步骤"></a>搭建步骤</h1><p>以下流程，在集群的机器上都做一遍。<br>1、在zookeeper下创建mydata文件夹<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mkdir mydata</div></pre></td></tr></table></figure></p>
-<p>2、进入 zookeeper下的conf文件夹，新建 zoo.cfg文件（拷贝zoo_sample.cfg）<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">cp zoo_sample.cfg zoo.cfg</div></pre></td></tr></table></figure></p>
-<p>3、编辑zoo.cfg<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">vim zoo.cfg</div></pre></td></tr></table></figure></p>
+        <p>官网下载redis安装包，这里使用：redis-3.2.8.tar.gz。安装在<strong>/usr/local</strong>下。</p>
+<h1 id="安装-tcl"><a href="#安装-tcl" class="headerlink" title="安装 tcl"></a>安装 tcl</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">wget http://downloads.sourceforge.net/tcl/tcl8.6.1-src.tar.gz</div><div class="line">tar -xzvf tcl8.6.1-src.tar.gz</div><div class="line"><span class="built_in">cd</span>  /usr/<span class="built_in">local</span>/tcl8.6.1/unix/</div><div class="line">./configure  </div><div class="line">make &amp;&amp; make install</div></pre></td></tr></table></figure>
+<h1 id="安装Redis"><a href="#安装Redis" class="headerlink" title="安装Redis"></a>安装Redis</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">tar -zxvf redis-3.2.8.tar.gz</div><div class="line"><span class="built_in">cd</span> redis-3.2.8</div><div class="line">make </div><div class="line">make <span class="built_in">test</span></div><div class="line">make install</div></pre></td></tr></table></figure>
+<h1 id="问题解决"><a href="#问题解决" class="headerlink" title="问题解决"></a>问题解决</h1><h2 id="make出错"><a href="#make出错" class="headerlink" title="make出错"></a>make出错</h2><p>解决办法：安装gcc<br>步骤：</p>
 <ul>
-<li>修改datadir为前面mydata的路径，可以利用pwd查看</li>
-<li>在最后面添加server的列表<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">server.0=192.168.40.40:2008:6008  </div><div class="line">server.1=192.168.40.41:2008:6008  </div><div class="line">server.2=192.168.40.42:2008:6008</div></pre></td></tr></table></figure>
-</li>
+<li>能上网：</li>
 </ul>
-<p>4、在各自mydata下面创建myid的文件，在里面写入server的数字(根据ip对应的server.?的?)<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">vim myid</div></pre></td></tr></table></figure></p>
-<p>5、启动zookeeper</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">yum install gcc-c++</div></pre></td></tr></table></figure>
 <ul>
-<li>启动命令：</li>
+<li>不能上网:<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="http://www.wailian.work/images/2018/01/31/image.png" alt="image.png"></li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">./zkServer.sh start</div></pre></td></tr></table></figure>
-<ul>
-<li>查看状态：</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">/zkServer.sh status</div></pre></td></tr></table></figure>
-<p><img src="http://s1.wailian.download/2018/01/20/image.png" alt="image.png"><br><img src="http://s1.wailian.download/2018/01/20/image650e2.png" alt="image650e2.png"></p>
-<h1 id="server列表解释"><a href="#server列表解释" class="headerlink" title="server列表解释"></a>server列表解释</h1><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;服务器名称与地址：集群信息（服务器编号，服务器地址，LF通信端口，选举端口）。这个配置项的书写格式比较特殊，规则如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">server.N=YYY:A:B</div></pre></td></tr></table></figure></p>
-<ul>
-<li>N表示服务器编号</li>
-<li>YYY表示服务器的IP地址</li>
-<li>A为LF通信端口，表示该服务器与集群中的leader交换的信息的端口</li>
-<li>B为选举端口，表示选举新leader时服务器间相互通信的端口（当leader挂掉时，其余服务器会相互通信，选择出新的leader）</li>
-</ul>
-<h1 id="zookeeper异常"><a href="#zookeeper异常" class="headerlink" title="zookeeper异常"></a>zookeeper异常</h1><p>Zookeeper启动异常：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Error contacting service. It is probably not running.</div></pre></td></tr></table></figure></p>
-<p>可能原因：</p>
-<ol>
-<li>重试几次，要是还失败，就可能是下面的原因</li>
-<li>zoo.cfg配置文件有问题</li>
-<li>zoo.cfg配置文件中指定目录却没有创建！ 创建相应目录即可。</li>
-<li><p>zoo.cfg中dataDir指定路径为myid文件的路径。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">myid内容与：server.?=localhost:2888:3888 中你所设置？一致！</div></pre></td></tr></table></figure>
-</li>
-<li><p>使用<code>service iptables stop</code> 关闭防火墙,使用<code>service iptables status</code>确认</p>
-</li>
-</ol>
+<h2 id="二次-make出错"><a href="#二次-make出错" class="headerlink" title="二次 make出错"></a>二次 make出错</h2><p>提示：<strong>Jemalloc/jemalloc.h：没有那个文件或目录</strong><br>解决办法：运行<code>make distclean</code>之后再<code>make</code></p>
+<h2 id="make-test出错"><a href="#make-test出错" class="headerlink" title="make test出错"></a>make test出错</h2><p>报如下错误，不过不影响安装。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">!!! WARNING The following tests failed:</div><div class="line"></div><div class="line">*** [err]: Server is able to generate a stack trace on selected systems <span class="keyword">in</span> tests/integration/logging.tcl</div><div class="line">expected stack trace not found into <span class="built_in">log</span> file</div><div class="line">Cleanup: may take some time... OK</div><div class="line">make[1]: *** [<span class="built_in">test</span>] Error 1</div><div class="line">make[1]: Leaving directory `/usr/<span class="built_in">local</span>/redis-3.2.8/src<span class="string">'</span></div><div class="line"><span class="string">make: *** [test] Error 2</span></div></pre></td></tr></table></figure></p>
 
       
     </div>
@@ -354,13 +325,13 @@
   
     
     <div class="copyright">
-        <p><span>本文标题:</span><a href="/2018/01/20/【zookeeper】集群搭建/">【zookeeper】集群搭建</a></p>
+        <p><span>本文标题:</span><a href="/2018/01/31/【Redis】安装单机版Redis/">【Redis】安装单机版Redis</a></p>
         <p><span>文章作者:</span><a href="/" title="回到主页">lzp</a></p>
-        <p><span>发布时间:</span>2018-01-20, 00:00:00</p>
-        <p><span>最后更新:</span>2018-01-20, 18:14:58</p>
+        <p><span>发布时间:</span>2018-01-31, 00:00:00</p>
+        <p><span>最后更新:</span>2018-01-31, 13:44:42</p>
         <p>
-            <span>原始链接:</span><a class="post-url" href="/2018/01/20/【zookeeper】集群搭建/" title="【zookeeper】集群搭建">https://liuzhongpo.github.io/2018/01/20/【zookeeper】集群搭建/</a>
-            <span class="copy-path" data-clipboard-text="原文: https://liuzhongpo.github.io/2018/01/20/【zookeeper】集群搭建/　　作者: lzp" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <span>原始链接:</span><a class="post-url" href="/2018/01/31/【Redis】安装单机版Redis/" title="【Redis】安装单机版Redis">https://liuzhongpo.github.io/2018/01/31/【Redis】安装单机版Redis/</a>
+            <span class="copy-path" data-clipboard-text="原文: https://liuzhongpo.github.io/2018/01/31/【Redis】安装单机版Redis/　　作者: lzp" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
             <script> var clipboard = new Clipboard('.copy-path'); </script>
         </p>
         <p>
@@ -373,15 +344,15 @@
     <nav id="article-nav">
         
             <div id="article-nav-newer" class="article-nav-title">
-                <a href="/2018/01/21/【zookeeper】Curator基础/">
-                    【zookeeper】Curator基础
+                <a href="/2018/01/31/【Redis】生产环境启动方案/">
+                    【Redis】生产环境启动方案
                 </a>
             </div>
         
         
             <div id="article-nav-older" class="article-nav-title">
-                <a href="/2018/01/08/【zookeeper】基础知识以及操作/">
-                    【zookeeper】基础知识及操作
+                <a href="/2018/01/23/【zookeeper】Curator实现基于zookeeper的分布式锁/">
+                    【zookeeper】Curator实现基于zookeeper的分布式锁
                 </a>
             </div>
         
@@ -393,7 +364,7 @@
     <div id="toc" class="toc-article">
         <strong class="toc-title">文章目录</strong>
         
-            <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#搭建步骤"><span class="toc-number">1.</span> <span class="toc-text">搭建步骤</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#server列表解释"><span class="toc-number">2.</span> <span class="toc-text">server列表解释</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#zookeeper异常"><span class="toc-number">3.</span> <span class="toc-text">zookeeper异常</span></a></li></ol>
+            <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#安装-tcl"><span class="toc-number">1.</span> <span class="toc-text">安装 tcl</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#安装Redis"><span class="toc-number">2.</span> <span class="toc-text">安装Redis</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#问题解决"><span class="toc-number">3.</span> <span class="toc-text">问题解决</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#make出错"><span class="toc-number">3.1.</span> <span class="toc-text">make出错</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#二次-make出错"><span class="toc-number">3.2.</span> <span class="toc-text">二次 make出错</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#make-test出错"><span class="toc-number">3.3.</span> <span class="toc-text">make test出错</span></a></li></ol></li></ol>
         
     </div>
     <style>
@@ -429,7 +400,7 @@
         </div>
         <script>
             window._bd_share_config={
-                "common":{"bdSnsKey":{},"bdText":"【zookeeper】集群搭建　| LZP BLOG　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+                "common":{"bdSnsKey":{},"bdText":"【Redis】安装单机版Redis　| LZP BLOG　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
         </script>
     
 
@@ -463,7 +434,7 @@
 
     <div class="scroll" id="post-nav-button">
         
-            <a href="/2018/01/21/【zookeeper】Curator基础/" title="上一篇: 【zookeeper】Curator基础">
+            <a href="/2018/01/31/【Redis】生产环境启动方案/" title="上一篇: 【Redis】生产环境启动方案">
                 <i class="fa fa-angle-left"></i>
             </a>
         
@@ -471,7 +442,7 @@
         <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
 
         
-            <a href="/2018/01/08/【zookeeper】基础知识以及操作/" title="下一篇: 【zookeeper】基础知识及操作">
+            <a href="/2018/01/23/【zookeeper】Curator实现基于zookeeper的分布式锁/" title="下一篇: 【zookeeper】Curator实现基于zookeeper的分布式锁">
                 <i class="fa fa-angle-right"></i>
             </a>
         

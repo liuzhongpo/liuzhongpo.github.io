@@ -3,6 +3,99 @@
   
     
     <entry>
+      <title><![CDATA[【Redis】生产环境启动方案]]></title>
+      <url>/2018/01/31/%E3%80%90Redis%E3%80%91%E7%94%9F%E4%BA%A7%E7%8E%AF%E5%A2%83%E5%90%AF%E5%8A%A8%E6%96%B9%E6%A1%88/</url>
+      <content type="html"><![CDATA[<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;如果一般的学习，随便用<code>redis-server</code>启动一下redis，做一些实验，这样的话，没什么意义。要把redis作为一个系统的daemon进程去运行的，每次系统启动，redis进程一起启动<br>配置步骤：<br>（1）redis <code>utils</code>目录下，有个<code>redis_init_script</code>脚本<br>（2）将<code>redis_init_script</code>脚本拷贝到linux的<code>/etc/init.d</code>目录中，将<code>redis_init_script</code>重命名为<code>redis_6379</code>，6379是我们希望这个redis实例监听的端口号<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">cp redis_init_script /etc/init.d</div><div class="line">cd /etc/init.d</div><div class="line">mv redis_init_script redis_6379</div></pre></td></tr></table></figure></p>
+<p>（3）修改<code>redis_6379</code>脚本的第6行的<code>REDISPORT</code>，设置为相同的端口号（默认就是6379）<br>（4）创建两个目录：<code>/etc/redis</code>（存放redis的配置文件），<code>/var/redis/6379</code>（存放redis的持久化文件）<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">mkdir /etc/redis</div><div class="line">mkdir -p /var/redis/6379</div></pre></td></tr></table></figure></p>
+<p>（5）修改redis配置文件（默认在根目录下，<code>redis.conf</code>），拷贝到<code>/etc/redis</code>目录中，修改名称为<code>6379.conf</code><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">cp redis.conf /etc/redis</div><div class="line">mv redis.conf 6379.conf</div></pre></td></tr></table></figure></p>
+<p>（6）修改<code>redis.conf</code>中的部分配置为生产环境:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">属性</th>
+<th style="text-align:center">值</th>
+<th style="text-align:center">解释</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">daemonize</td>
+<td style="text-align:center">yes</td>
+<td style="text-align:center">让redis以daemon进程运行</td>
+</tr>
+<tr>
+<td style="text-align:left">pidfile</td>
+<td style="text-align:center">/var/run/redis_6379.pid</td>
+<td style="text-align:center">设置redis的pid文件位置</td>
+</tr>
+<tr>
+<td style="text-align:left">port</td>
+<td style="text-align:center">6379(默认值)</td>
+<td style="text-align:center">设置redis的监听端口号</td>
+</tr>
+<tr>
+<td style="text-align:left">dir</td>
+<td style="text-align:center">/var/redis/6379</td>
+<td style="text-align:center">设置持久化文件的存储位置</td>
+</tr>
+</tbody>
+</table>
+<p>（7）启动redis，执行:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">cd /etc/init.d</div><div class="line">chmod 777 redis_6379</div><div class="line">./redis_6379 start</div></pre></td></tr></table></figure></p>
+<p>（8）确认redis进程是否启动，<code>ps -ef | grep redis</code><br>（9）让redis跟随系统启动自动启动,在<code>redis_6379</code>脚本中，最上面，加入两行注释:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"># chkconfig:   2345 90 10</div><div class="line"># description:  Redis is a persistent key-value database</div></pre></td></tr></table></figure></p>
+<p>（10）执行：<code>chkconfig redis_6379 on</code></p>
+]]></content>
+      
+        <categories>
+            
+            <category> redis </category>
+            
+        </categories>
+        
+        
+        <tags>
+            
+            <tag> redis </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
+      <title><![CDATA[【Redis】安装单机版Redis]]></title>
+      <url>/2018/01/31/%E3%80%90Redis%E3%80%91%E5%AE%89%E8%A3%85%E5%8D%95%E6%9C%BA%E7%89%88Redis/</url>
+      <content type="html"><![CDATA[<p>官网下载redis安装包，这里使用：redis-3.2.8.tar.gz。安装在<strong>/usr/local</strong>下。</p>
+<h1 id="安装-tcl"><a href="#安装-tcl" class="headerlink" title="安装 tcl"></a>安装 tcl</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">wget http://downloads.sourceforge.net/tcl/tcl8.6.1-src.tar.gz</div><div class="line">tar -xzvf tcl8.6.1-src.tar.gz</div><div class="line"><span class="built_in">cd</span>  /usr/<span class="built_in">local</span>/tcl8.6.1/unix/</div><div class="line">./configure  </div><div class="line">make &amp;&amp; make install</div></pre></td></tr></table></figure>
+<h1 id="安装Redis"><a href="#安装Redis" class="headerlink" title="安装Redis"></a>安装Redis</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">tar -zxvf redis-3.2.8.tar.gz</div><div class="line"><span class="built_in">cd</span> redis-3.2.8</div><div class="line">make </div><div class="line">make <span class="built_in">test</span></div><div class="line">make install</div></pre></td></tr></table></figure>
+<h1 id="问题解决"><a href="#问题解决" class="headerlink" title="问题解决"></a>问题解决</h1><h2 id="make出错"><a href="#make出错" class="headerlink" title="make出错"></a>make出错</h2><p>解决办法：安装gcc<br>步骤：</p>
+<ul>
+<li>能上网：</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">yum install gcc-c++</div></pre></td></tr></table></figure>
+<ul>
+<li>不能上网:<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="http://www.wailian.work/images/2018/01/31/image.png" alt="image.png"></li>
+</ul>
+<h2 id="二次-make出错"><a href="#二次-make出错" class="headerlink" title="二次 make出错"></a>二次 make出错</h2><p>提示：<strong>Jemalloc/jemalloc.h：没有那个文件或目录</strong><br>解决办法：运行<code>make distclean</code>之后再<code>make</code></p>
+<h2 id="make-test出错"><a href="#make-test出错" class="headerlink" title="make test出错"></a>make test出错</h2><p>报如下错误，不过不影响安装。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">!!! WARNING The following tests failed:</div><div class="line"></div><div class="line">*** [err]: Server is able to generate a stack trace on selected systems <span class="keyword">in</span> tests/integration/logging.tcl</div><div class="line">expected stack trace not found into <span class="built_in">log</span> file</div><div class="line">Cleanup: may take some time... OK</div><div class="line">make[1]: *** [<span class="built_in">test</span>] Error 1</div><div class="line">make[1]: Leaving directory `/usr/<span class="built_in">local</span>/redis-3.2.8/src<span class="string">'</span></div><div class="line"><span class="string">make: *** [test] Error 2</span></div></pre></td></tr></table></figure></p>
+]]></content>
+      
+        <categories>
+            
+            <category> redis </category>
+            
+        </categories>
+        
+        
+        <tags>
+            
+            <tag> redis </tag>
+            
+            <tag> CentOS </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
       <title><![CDATA[【zookeeper】Curator实现基于zookeeper的分布式锁]]></title>
       <url>/2018/01/23/%E3%80%90zookeeper%E3%80%91Curator%E5%AE%9E%E7%8E%B0%E5%9F%BA%E4%BA%8Ezookeeper%E7%9A%84%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/</url>
       <content type="html"><![CDATA[<h1 id="分布式锁理论"><a href="#分布式锁理论" class="headerlink" title="分布式锁理论"></a>分布式锁理论</h1><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;分布式的CAP理论告诉我们“任何一个分布式系统都无法同时满足一致性（Consistency）、可用性（Availability）和分区容错性（Partition tolerance），最多只能同时满足两项。”所以，很多系统在设计之初就要对这三者做出取舍。在互联网领域的绝大多数的场景中，都需要<strong>牺牲强一致性来换取系统的高可用性</strong>，系统往往只需要保证“最终一致性”，只要这个最终时间是在用户可以接受的范围内即可。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;由于在平时的工作中，线上服务器是分布式多台部署的，经常会面临解决分布式场景下数据一致性的问题，在集群环境中都是多个JVM协同工作，需要一些全局锁，那么就要利用分布式锁来解决这些问题。在单机环境中，Java中其实提供了很多并发处理相关的API，但是这些API在分布式场景中就无能为力了。也就是说<strong>单纯的Java Api并不能提供分布式锁的能力</strong>。</p>

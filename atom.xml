@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://liuzhongpo.github.io/"/>
-  <updated>2018-01-23T03:55:20.262Z</updated>
+  <updated>2018-01-31T06:14:16.851Z</updated>
   <id>https://liuzhongpo.github.io/</id>
   
   <author>
@@ -15,6 +15,52 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>【Redis】生产环境启动方案</title>
+    <link href="https://liuzhongpo.github.io/2018/01/31/%E3%80%90Redis%E3%80%91%E7%94%9F%E4%BA%A7%E7%8E%AF%E5%A2%83%E5%90%AF%E5%8A%A8%E6%96%B9%E6%A1%88/"/>
+    <id>https://liuzhongpo.github.io/2018/01/31/【Redis】生产环境启动方案/</id>
+    <published>2018-01-30T16:00:00.000Z</published>
+    <updated>2018-01-31T06:14:16.851Z</updated>
+    
+    <content type="html"><![CDATA[<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;如果一般的学习，随便用<code>redis-server</code>启动一下redis，做一些实验，这样的话，没什么意义。要把redis作为一个系统的daemon进程去运行的，每次系统启动，redis进程一起启动<br>配置步骤：<br>（1）redis <code>utils</code>目录下，有个<code>redis_init_script</code>脚本<br>（2）将<code>redis_init_script</code>脚本拷贝到linux的<code>/etc/init.d</code>目录中，将<code>redis_init_script</code>重命名为<code>redis_6379</code>，6379是我们希望这个redis实例监听的端口号<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">cp redis_init_script /etc/init.d</div><div class="line">cd /etc/init.d</div><div class="line">mv redis_init_script redis_6379</div></pre></td></tr></table></figure></p><p>（3）修改<code>redis_6379</code>脚本的第6行的<code>REDISPORT</code>，设置为相同的端口号（默认就是6379）<br>（4）创建两个目录：<code>/etc/redis</code>（存放redis的配置文件），<code>/var/redis/6379</code>（存放redis的持久化文件）<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">mkdir /etc/redis</div><div class="line">mkdir -p /var/redis/6379</div></pre></td></tr></table></figure></p><p>（5）修改redis配置文件（默认在根目录下，<code>redis.conf</code>），拷贝到<code>/etc/redis</code>目录中，修改名称为<code>6379.conf</code><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">cp redis.conf /etc/redis</div><div class="line">mv redis.conf 6379.conf</div></pre></td></tr></table></figure></p><p>（6）修改<code>redis.conf</code>中的部分配置为生产环境:</p><table><thead><tr><th style="text-align:left">属性</th><th style="text-align:center">值</th><th style="text-align:center">解释</th></tr></thead><tbody><tr><td style="text-align:left">daemonize</td><td style="text-align:center">yes</td><td style="text-align:center">让redis以daemon进程运行</td></tr><tr><td style="text-align:left">pidfile</td><td style="text-align:center">/var/run/redis_6379.pid</td><td style="text-align:center">设置redis的pid文件位置</td></tr><tr><td style="text-align:left">port</td><td style="text-align:center">6379(默认值)</td><td style="text-align:center">设置redis的监听端口号</td></tr><tr><td style="text-align:left">dir</td><td style="text-align:center">/var/redis/6379</td><td style="text-align:center">设置持久化文件的存储位置</td></tr></tbody></table><p>（7）启动redis，执行:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">cd /etc/init.d</div><div class="line">chmod 777 redis_6379</div><div class="line">./redis_6379 start</div></pre></td></tr></table></figure></p><p>（8）确认redis进程是否启动，<code>ps -ef | grep redis</code><br>（9）让redis跟随系统启动自动启动,在<code>redis_6379</code>脚本中，最上面，加入两行注释:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"># chkconfig:   2345 90 10</div><div class="line"># description:  Redis is a persistent key-value database</div></pre></td></tr></table></figure></p><p>（10）执行：<code>chkconfig redis_6379 on</code></p>]]></content>
+    
+    <summary type="html">
+    
+      如果一般的学习，随便用redis-server启动一下redis，做一些实验。这样的话，没什么意义。要把redis作为一个系统的daemon进程去运行的，每次系统启动，redis进程一起启动。
+    
+    </summary>
+    
+      <category term="redis" scheme="https://liuzhongpo.github.io/categories/redis/"/>
+    
+    
+      <category term="redis" scheme="https://liuzhongpo.github.io/tags/redis/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>【Redis】安装单机版Redis</title>
+    <link href="https://liuzhongpo.github.io/2018/01/31/%E3%80%90Redis%E3%80%91%E5%AE%89%E8%A3%85%E5%8D%95%E6%9C%BA%E7%89%88Redis/"/>
+    <id>https://liuzhongpo.github.io/2018/01/31/【Redis】安装单机版Redis/</id>
+    <published>2018-01-30T16:00:00.000Z</published>
+    <updated>2018-01-31T05:44:42.836Z</updated>
+    
+    <content type="html"><![CDATA[<p>官网下载redis安装包，这里使用：redis-3.2.8.tar.gz。安装在<strong>/usr/local</strong>下。</p><h1 id="安装-tcl"><a href="#安装-tcl" class="headerlink" title="安装 tcl"></a>安装 tcl</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">wget http://downloads.sourceforge.net/tcl/tcl8.6.1-src.tar.gz</div><div class="line">tar -xzvf tcl8.6.1-src.tar.gz</div><div class="line"><span class="built_in">cd</span>  /usr/<span class="built_in">local</span>/tcl8.6.1/unix/</div><div class="line">./configure  </div><div class="line">make &amp;&amp; make install</div></pre></td></tr></table></figure><h1 id="安装Redis"><a href="#安装Redis" class="headerlink" title="安装Redis"></a>安装Redis</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">tar -zxvf redis-3.2.8.tar.gz</div><div class="line"><span class="built_in">cd</span> redis-3.2.8</div><div class="line">make </div><div class="line">make <span class="built_in">test</span></div><div class="line">make install</div></pre></td></tr></table></figure><h1 id="问题解决"><a href="#问题解决" class="headerlink" title="问题解决"></a>问题解决</h1><h2 id="make出错"><a href="#make出错" class="headerlink" title="make出错"></a>make出错</h2><p>解决办法：安装gcc<br>步骤：</p><ul><li>能上网：</li></ul><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">yum install gcc-c++</div></pre></td></tr></table></figure><ul><li>不能上网:<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="http://www.wailian.work/images/2018/01/31/image.png" alt="image.png"></li></ul><h2 id="二次-make出错"><a href="#二次-make出错" class="headerlink" title="二次 make出错"></a>二次 make出错</h2><p>提示：<strong>Jemalloc/jemalloc.h：没有那个文件或目录</strong><br>解决办法：运行<code>make distclean</code>之后再<code>make</code></p><h2 id="make-test出错"><a href="#make-test出错" class="headerlink" title="make test出错"></a>make test出错</h2><p>报如下错误，不过不影响安装。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">!!! WARNING The following tests failed:</div><div class="line"></div><div class="line">*** [err]: Server is able to generate a stack trace on selected systems <span class="keyword">in</span> tests/integration/logging.tcl</div><div class="line">expected stack trace not found into <span class="built_in">log</span> file</div><div class="line">Cleanup: may take some time... OK</div><div class="line">make[1]: *** [<span class="built_in">test</span>] Error 1</div><div class="line">make[1]: Leaving directory `/usr/<span class="built_in">local</span>/redis-3.2.8/src<span class="string">'</span></div><div class="line"><span class="string">make: *** [test] Error 2</span></div></pre></td></tr></table></figure></p>]]></content>
+    
+    <summary type="html">
+    
+      安装单机版的Redis。最近接触了很多redis场景和配置，碰到很多生产和测试环境的各种问题，现在来重现以及解决。
+    
+    </summary>
+    
+      <category term="redis" scheme="https://liuzhongpo.github.io/categories/redis/"/>
+    
+    
+      <category term="redis" scheme="https://liuzhongpo.github.io/tags/redis/"/>
+    
+      <category term="CentOS" scheme="https://liuzhongpo.github.io/tags/CentOS/"/>
+    
+  </entry>
   
   <entry>
     <title>【zookeeper】Curator实现基于zookeeper的分布式锁</title>
