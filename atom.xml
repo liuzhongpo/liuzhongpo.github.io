@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://liuzhongpo.github.io/"/>
-  <updated>2018-03-17T13:29:45.477Z</updated>
+  <updated>2018-07-10T15:36:52.035Z</updated>
   <id>https://liuzhongpo.github.io/</id>
   
   <author>
@@ -15,6 +15,28 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Java核心技术36讲笔记【杨晓峰】</title>
+    <link href="https://liuzhongpo.github.io/2018/07/10/Java%E6%A0%B8%E5%BF%83%E6%8A%80%E6%9C%AF36%E8%AE%B2%E7%AC%94%E8%AE%B0%E3%80%90%E6%9D%A8%E6%99%93%E5%B3%B0%E3%80%91/"/>
+    <id>https://liuzhongpo.github.io/2018/07/10/Java核心技术36讲笔记【杨晓峰】/</id>
+    <published>2018-07-09T16:00:00.000Z</published>
+    <updated>2018-07-10T15:36:52.035Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="谈谈你对-Java-平台的理解？“Java-是解释执行”，这句话正确吗？"><a href="#谈谈你对-Java-平台的理解？“Java-是解释执行”，这句话正确吗？" class="headerlink" title="谈谈你对 Java 平台的理解？“Java 是解释执行”，这句话正确吗？"></a>谈谈你对 Java 平台的理解？“Java 是解释执行”，这句话正确吗？</h1><h2 id="对Java平台的理解"><a href="#对Java平台的理解" class="headerlink" title="对Java平台的理解"></a>对Java平台的理解</h2><p>可以从以下很多方面谈一下：</p><ul><li>Java的语言特性，包括面向对象、反射、泛型、Lambda等语言特性</li><li>Java基础类库，包括集合、IO/NIO、网络、并发、安全等基础类库；对于日常工作应用较多的类库可以总结一下。</li><li>Java虚拟机，谈谈jvm的基础概念和机制，比如：<ul><li>Java的类加载机制、常用版本的JDK(如8)内嵌的Class-Loader，例如Bootstrap、Application和Extension Class-Loader；类加载的大致过程：加载、严重、链接、初始化；自定义Class-Loader等。</li><li>垃圾收集的基本原理，最常见的垃圾收集器，如SerialGC、ParallelGC、CMS、G1等</li></ul></li><li>JDK包含哪些工具或者Java领域内的其他工具等，如编译器、运行时环境、安全工具、诊断和监控工具。<ul><li>辅助工具，如jlink、jar、jdeps等</li><li>编译器，javac、sjavac</li><li>诊断工具：jmap、jstack、jconsole、jhsdb、jcmd等</li></ul></li><li>Java/JVM生态：JavaEE、spring、hadoop、spark、ElasticSearch、Maven…</li></ul><h2 id="“Java-是解释执行”吗？"><a href="#“Java-是解释执行”吗？" class="headerlink" title="“Java 是解释执行”吗？"></a>“Java 是解释执行”吗？</h2><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;对于Java是解释执行”的说法不太准确。Java源码通过javac编译称为字节码(bytecode)，然后在运行时通过JVM内嵌的解释器将字节码转换成为最终的机器码。但是常见的JVM，比如大多数使用的Oracle JDK提供的Hotspot JVM,都提供了JIT(Just-In-Time)编译器，也就是通常所说的动态编译器，JIT能在运行时热点代码(比如将某些运行特别频繁的代码)编译成机器码并进行各种层次的优化，这种情况下部分热点代码就属于编译执行，而不是解释执行。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;我们通常把Java分为编译期和运行时。在编译期，javac编译Java源码生成”.class”文件，该文件里面实际是字节码，而不是刻意直接执行的机器码。Java通过字节码和Java虚拟机(JVM)这种跨平台的抽象，屏蔽了操作系统和硬件的细节，这也是实现”一次编译，到处运行”的基础。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在运行时，JVM会通过类加载器(Class-Loader)加载字节码，解释或者编译执行。如JDK8中实际是解释和编译混合的一种模式，即所谓的<strong>混合模式</strong>(-Xmixed)。通常运行在server模式的JVM会进行上万次调用以收集足够的信息进行高效的编译，client模式这个门限是1500次。Hotspot JVM内置了两个不同的JIT compiler，C1对应client模式，适用于对于启动速度敏感的应用，比如普通的Java桌面应用(工作中几乎没接触过)；C2对应server模式，他的优化是为长时间运行的服务器端应用设计。默认是采用所谓的<strong>分层编译</strong>(TieredCompilation)。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Java虚拟机启动时，可以指定不同的参数对运行模式进行选择。比如：</p><blockquote><p>-Xint:告诉JVM只进行解释执行，不对代码进行编译(-Xint标记会强制JVM执行所有字节码，抛弃了JIT可能带来的性能优势，<strong>解释器(interpreter)是逐条读入，逐条解释运行</strong>)。<br>-Xcomp:告诉JVM关闭解释器,不进行解释运行，或者叫做最大优化级别；JVM在第一次使用时会把所有的字节码编译成机器码，从而带来最大程度的优化(听起来不错，但是这种模式下并不一定是最高效的。比如：积极的<strong>分支预测</strong>（optimistic branch prediction），如果不先分析应用就不能有效的使用。另一方面方法只有证明它们与此相关时才会被编译，也就是，在应用中构建某种热点。被调用很少（甚至只有一次）的方法在解释模式下会继续执行，从而减少编译和优化成本)。(物极必反)<br>    除了以上模式，还有一种新的编译方式-AOT(Ahead-of-Time Compilation)，直接将字节码编译成机器码，这样避免了JIT预热等各方面的开销，比如 Oracle JDK9 引入了实验性的AOT特性，并且增加了新的jaotc工具。</p></blockquote><h1 id="Exception和Error有什么区别？"><a href="#Exception和Error有什么区别？" class="headerlink" title="Exception和Error有什么区别？"></a>Exception和Error有什么区别？</h1><h2 id="Throwable、Exception、Error-的设计和分类"><a href="#Throwable、Exception、Error-的设计和分类" class="headerlink" title="Throwable、Exception、Error 的设计和分类"></a>Throwable、Exception、Error 的设计和分类</h2><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Exception和Error都是集成了Throwable类，在Java中只有Throwable类型的会所里才可以被抛出(throw)或者捕获(catch),它是异常处理机制的基本组成类型。如下:</p><blockquote><p>Error是指在正常情况下，不大可能出现的情况，绝大部分的 Error 都会导致程序（比如 JVM 自身）处于非正常的、不可恢复状态。既然是非正常情况，所以不便于也不需要捕获，常见的比如OutOfMemoryError 之类，都是 Error 的子类。<br>Exception 又分为可检查（checked）异常和不检查（unchecked）异常[<strong>非运行时期异常和运行时异常</strong>]，可检查异常在源代码里必须显式地进行捕获处理，这是编译期检查的一部分。不检查异常就是所谓的运行时异常，类似NullPointerException、ArrayIndexOutOfBoundsException之类，通常是可以编码避免的逻辑错误，具体根据需要来判断是否需要捕获，并不会在编译期强制要求</p></blockquote><h2 id="Java语言中操作Throwable的元素和实践"><a href="#Java语言中操作Throwable的元素和实践" class="headerlink" title="Java语言中操作Throwable的元素和实践"></a>Java语言中操作Throwable的元素和实践</h2><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;异常处理基本语法：try-catch-finally、throw、throws关键字等。以及JDK7引入的try-with-resources和multiple，在编译时期，会自动生成相应的处理逻辑，比如自动按照约定俗成close那些扩展了AutoCloseable或Closeable对象。</p><ul><li>注意事项：<ul><li>尽量不要捕获类似Exception这样的通用异常，而是应该捕获特定异常。</li><li>不要生吞(swallow)异常。</li><li>e.printStackTrace()是不可取的。在分布式系统中，如果发生异常，你很难判断出到底输出到哪里去了，无法找对堆栈轨迹(stackstrace)。最好使用产品日志，详细的输出到日志系统里。</li><li>处理原则：Throw early,catch late。</li></ul></li></ul><h2 id="性能角度"><a href="#性能角度" class="headerlink" title="性能角度"></a>性能角度</h2><ul><li>try-catch 代码段会产生额外的性能开销，换个角度说，往往会影响JVM对代码进行优化，所以建议仅捕获有必要的代码段，尽量不要一个大的try包住整段代码。与此同时，利用异常控制代码流程，也不是一个好主意，远比我们通常意义上的条件语句(if/else、switch)要低效。</li><li>Java每实例化一个Exception，都会对当时的站进行快照，这是一个相对比较重的操作。如果发生的非常频繁，这个开销可就不能忽略了。</li></ul>]]></content>
+    
+    <summary type="html">
+    
+      好久没写博客，动起来。最近在地铁上看极客时间的相关技术文章，觉得还是得记(抄)下来，☺☺...
+    
+    </summary>
+    
+      <category term="基础知识" scheme="https://liuzhongpo.github.io/categories/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/"/>
+    
+    
+      <category term="基础知识" scheme="https://liuzhongpo.github.io/tags/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/"/>
+    
+  </entry>
   
   <entry>
     <title>【Redis】安装单机版Redis</title>
