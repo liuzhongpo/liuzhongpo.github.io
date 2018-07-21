@@ -3,6 +3,46 @@
   
     
     <entry>
+      <title><![CDATA[Exception和Error有什么区别？]]></title>
+      <url>/2018/07/21/Exception%E5%92%8CError%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%EF%BC%9F/</url>
+      <content type="html"><![CDATA[<h1 id="异常体系"><a href="#异常体系" class="headerlink" title="异常体系"></a>异常体系</h1><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Exception和Error都是继承了Throwable类，在Java中只有Throwable类型的会所里才可以被抛出(throw)或者捕获(catch),它是异常处理机制的基本组成类型。</p>
+<ul>
+<li>Error是指在正常情况下，不大可能出现的情况，绝大部分的 Error 都会导致程序（比如 JVM 自身）处于非正常的、不可恢复状态。既然是非正常情况，所以不便于也不需要捕获，常见的比如OutOfMemoryError 之类，都是 Error 的子类。</li>
+<li>Exception 又分为可检查（checked）异常和不检查（unchecked）异常[<strong>非运行期异常和运行时异常</strong>]，可检查异常在源代码里必须显式地进行捕获处理，这是编译期检查的一部分。不检查异常就是所谓的运行时异常，类似NullPointerException、ArrayIndexOutOfBoundsException之类，通常是可以编码避免的逻辑错误，具体根据需要来判断是否需要捕获，并不会在编译期强制要求</li>
+</ul>
+<h1 id="异常操作与实践"><a href="#异常操作与实践" class="headerlink" title="异常操作与实践"></a>异常操作与实践</h1><p> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;异常处理基本语法：try-catch-finally、throw、throws关键字等。以及JDK7引入的try-with-resources和multiple，在编译时期，会自动生成相应的处理逻辑，比如自动按照约定俗成close那些扩展了AutoCloseable或Closeable对象。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">try (FileInputStream inputStream = new FileInputStream(new File(&quot;test&quot;))) &#123;</div><div class="line">    //do something</div><div class="line">&#125; catch (IOException | XException e) &#123;</div><div class="line">    //handle it</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>注意事项：</p>
+<ul>
+<li>尽量不要捕获类似Exception这样的通用异常，而是应该捕获特定异常。</li>
+<li>不要生吞(swallow)异常。</li>
+<li>e.printStackTrace()是不可取的。在分布式系统中，如果发生异常，你很难判断出到底输出到哪里去了，无法找对堆栈轨迹(stackstrace)。最好使用产品日志，详细的输出到日志系统里。</li>
+<li>处理原则：Throw early,catch late。</li>
+</ul>
+<h1 id="性能角度"><a href="#性能角度" class="headerlink" title="性能角度"></a>性能角度</h1><ol>
+<li>try-catch 代码段会产生额外的性能开销，换个角度说，往往会影响JVM对代码进行优化，所以建议仅捕获有必要的代码段，尽量不要一个大的try包住整段代码。与此同时，利用异常控制代码流程，也不是一个好主意，远比我们通常意义上的条件语句(if/else、switch)要低效。</li>
+<li>Java每实例化一个Exception，都会对当时的栈进行快照，这是一个相对比较重的操作。如果发生的非常频繁，这个开销可就不能忽略了。【<strong>这里有疑问：为什么要生成快照？什么时间销毁呢？期待后续学习能理解和解决</strong>】</li>
+</ol>
+]]></content>
+      
+        <categories>
+            
+            <category> 基础知识 </category>
+            
+        </categories>
+        
+        
+        <tags>
+            
+            <tag> 基础知识 </tag>
+            
+            <tag> Java核心技术36讲 </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
       <title><![CDATA[Java是解释执行吗？]]></title>
       <url>/2018/07/21/Java%E6%98%AF%E8%A7%A3%E9%87%8A%E6%89%A7%E8%A1%8C%E5%90%97%EF%BC%9F/</url>
       <content type="html"><![CDATA[<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;对于”Java是解释执行”的说法不太准确。Java源代码通过javac编译成字节码(bytecode)，再然后在运行时通过JVM内嵌的解释器将字节码转换成为最终的机器码。但是常见的JVM，比如大多数使用的Oracle JDK提供的Hotspot JVM,都提供了<strong>JIT(Just-In-Time)编译器</strong>，也就是通常所说的动态编译器，JIT能在运行时热点代码(比如将某些运行特别频繁的代码)编译成机器码并进行各种层次的优化，这种情况下部分热点代码就属于编译执行，而不是解释执行。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;首先先明确一些概念，<strong>什么是解释执行？什么是编译执行？</strong><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;计算机的每次动作或者步骤，都是按照计算机语言编好的程序(计算机执行指令集合)来执行的。但是计算机能识别的语言只有机器语言，即由0和1构成的代码。目前通用的编程语言有两种形式：汇编语言和高级语言。汇编语言和机器语言是相同的，都是直接对硬件操作，只不过指令采用了英文缩写的标识符，更容易识别和记忆。高级语言主要是相对于汇编语言而言，高级语言编写的程序不能直接被计算机识别，必须经过转换才能被执行，按转换方式可将它们分为两类：解释类和编译类。</p>
@@ -32,6 +72,41 @@
             <tag> 基础知识 </tag>
             
             <tag> Java核心技术36讲 </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
+      <title><![CDATA[【Redis】安装单机版Redis]]></title>
+      <url>/2018/01/31/%E3%80%90Redis%E3%80%91%E5%AE%89%E8%A3%85%E5%8D%95%E6%9C%BA%E7%89%88Redis/</url>
+      <content type="html"><![CDATA[<p>官网下载redis安装包，这里使用：<code>redis-3.2.8.tar.gz</code>。安装在<strong>/usr/local</strong>下。</p>
+<h1 id="安装-tcl"><a href="#安装-tcl" class="headerlink" title="安装 tcl"></a>安装 tcl</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">wget http://downloads.sourceforge.net/tcl/tcl8.6.1-src.tar.gz</div><div class="line">tar -xzvf tcl8.6.1-src.tar.gz</div><div class="line">cd  /usr/local/tcl8.6.1/unix/</div><div class="line">./configure  </div><div class="line">make &amp;&amp; make install</div></pre></td></tr></table></figure>
+<h1 id="安装Redis"><a href="#安装Redis" class="headerlink" title="安装Redis"></a>安装Redis</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">tar -zxvf redis-3.2.8.tar.gz</div><div class="line">cd redis-3.2.8</div><div class="line">make </div><div class="line">make test</div><div class="line">make install</div></pre></td></tr></table></figure>
+<h1 id="问题解决"><a href="#问题解决" class="headerlink" title="问题解决"></a>问题解决</h1><h2 id="make出错"><a href="#make出错" class="headerlink" title="make出错"></a>make出错</h2><p>解决办法：<strong>安装gcc</strong><br>步骤：</p>
+<ul>
+<li>能上网：</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">yum install gcc-c++</div></pre></td></tr></table></figure>
+<ul>
+<li>不能上网:<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="http://www.wailian.work/images/2018/01/31/image.png" alt="image.png"></li>
+</ul>
+<h2 id="二次-make出错"><a href="#二次-make出错" class="headerlink" title="二次 make出错"></a>二次 make出错</h2><p>提示：<strong>Jemalloc/jemalloc.h：没有那个文件或目录</strong><br>解决办法：运行<code>make distclean</code>之后再<code>make</code></p>
+<h2 id="make-test出错"><a href="#make-test出错" class="headerlink" title="make test出错"></a>make test出错</h2><p>报如下错误，不过不影响安装。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">!!! WARNING The following tests failed:</div><div class="line"></div><div class="line">*** [err]: Server is able to generate a stack trace on selected systems in tests/integration/logging.tcl</div><div class="line">expected stack trace not found into log file</div><div class="line">Cleanup: may take some time... OK</div><div class="line">make[1]: *** [test] Error 1</div><div class="line">make[1]: Leaving directory `/usr/local/redis-3.2.8/src&apos;</div><div class="line">make: *** [test] Error 2</div></pre></td></tr></table></figure>]]></content>
+      
+        <categories>
+            
+            <category> redis </category>
+            
+        </categories>
+        
+        
+        <tags>
+            
+            <tag> redis </tag>
+            
+            <tag> CentOS </tag>
             
         </tags>
         
@@ -90,41 +165,6 @@
         <tags>
             
             <tag> redis </tag>
-            
-        </tags>
-        
-    </entry>
-    
-    <entry>
-      <title><![CDATA[【Redis】安装单机版Redis]]></title>
-      <url>/2018/01/31/%E3%80%90Redis%E3%80%91%E5%AE%89%E8%A3%85%E5%8D%95%E6%9C%BA%E7%89%88Redis/</url>
-      <content type="html"><![CDATA[<p>官网下载redis安装包，这里使用：<code>redis-3.2.8.tar.gz</code>。安装在<strong>/usr/local</strong>下。</p>
-<h1 id="安装-tcl"><a href="#安装-tcl" class="headerlink" title="安装 tcl"></a>安装 tcl</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">wget http://downloads.sourceforge.net/tcl/tcl8.6.1-src.tar.gz</div><div class="line">tar -xzvf tcl8.6.1-src.tar.gz</div><div class="line">cd  /usr/local/tcl8.6.1/unix/</div><div class="line">./configure  </div><div class="line">make &amp;&amp; make install</div></pre></td></tr></table></figure>
-<h1 id="安装Redis"><a href="#安装Redis" class="headerlink" title="安装Redis"></a>安装Redis</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">tar -zxvf redis-3.2.8.tar.gz</div><div class="line">cd redis-3.2.8</div><div class="line">make </div><div class="line">make test</div><div class="line">make install</div></pre></td></tr></table></figure>
-<h1 id="问题解决"><a href="#问题解决" class="headerlink" title="问题解决"></a>问题解决</h1><h2 id="make出错"><a href="#make出错" class="headerlink" title="make出错"></a>make出错</h2><p>解决办法：<strong>安装gcc</strong><br>步骤：</p>
-<ul>
-<li>能上网：</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">yum install gcc-c++</div></pre></td></tr></table></figure>
-<ul>
-<li>不能上网:<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="http://www.wailian.work/images/2018/01/31/image.png" alt="image.png"></li>
-</ul>
-<h2 id="二次-make出错"><a href="#二次-make出错" class="headerlink" title="二次 make出错"></a>二次 make出错</h2><p>提示：<strong>Jemalloc/jemalloc.h：没有那个文件或目录</strong><br>解决办法：运行<code>make distclean</code>之后再<code>make</code></p>
-<h2 id="make-test出错"><a href="#make-test出错" class="headerlink" title="make test出错"></a>make test出错</h2><p>报如下错误，不过不影响安装。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">!!! WARNING The following tests failed:</div><div class="line"></div><div class="line">*** [err]: Server is able to generate a stack trace on selected systems in tests/integration/logging.tcl</div><div class="line">expected stack trace not found into log file</div><div class="line">Cleanup: may take some time... OK</div><div class="line">make[1]: *** [test] Error 1</div><div class="line">make[1]: Leaving directory `/usr/local/redis-3.2.8/src&apos;</div><div class="line">make: *** [test] Error 2</div></pre></td></tr></table></figure>]]></content>
-      
-        <categories>
-            
-            <category> redis </category>
-            
-        </categories>
-        
-        
-        <tags>
-            
-            <tag> redis </tag>
-            
-            <tag> CentOS </tag>
             
         </tags>
         

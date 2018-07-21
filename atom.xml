@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://liuzhongpo.github.io/"/>
-  <updated>2018-07-21T14:26:04.618Z</updated>
+  <updated>2018-07-21T14:54:12.971Z</updated>
   <id>https://liuzhongpo.github.io/</id>
   
   <author>
@@ -15,6 +15,30 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Exception和Error有什么区别？</title>
+    <link href="https://liuzhongpo.github.io/2018/07/21/Exception%E5%92%8CError%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%EF%BC%9F/"/>
+    <id>https://liuzhongpo.github.io/2018/07/21/Exception和Error有什么区别？/</id>
+    <published>2018-07-20T16:00:00.000Z</published>
+    <updated>2018-07-21T14:54:12.971Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="异常体系"><a href="#异常体系" class="headerlink" title="异常体系"></a>异常体系</h1><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Exception和Error都是继承了Throwable类，在Java中只有Throwable类型的会所里才可以被抛出(throw)或者捕获(catch),它是异常处理机制的基本组成类型。</p><ul><li>Error是指在正常情况下，不大可能出现的情况，绝大部分的 Error 都会导致程序（比如 JVM 自身）处于非正常的、不可恢复状态。既然是非正常情况，所以不便于也不需要捕获，常见的比如OutOfMemoryError 之类，都是 Error 的子类。</li><li>Exception 又分为可检查（checked）异常和不检查（unchecked）异常[<strong>非运行期异常和运行时异常</strong>]，可检查异常在源代码里必须显式地进行捕获处理，这是编译期检查的一部分。不检查异常就是所谓的运行时异常，类似NullPointerException、ArrayIndexOutOfBoundsException之类，通常是可以编码避免的逻辑错误，具体根据需要来判断是否需要捕获，并不会在编译期强制要求</li></ul><h1 id="异常操作与实践"><a href="#异常操作与实践" class="headerlink" title="异常操作与实践"></a>异常操作与实践</h1><p> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;异常处理基本语法：try-catch-finally、throw、throws关键字等。以及JDK7引入的try-with-resources和multiple，在编译时期，会自动生成相应的处理逻辑，比如自动按照约定俗成close那些扩展了AutoCloseable或Closeable对象。</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">try (FileInputStream inputStream = new FileInputStream(new File(&quot;test&quot;))) &#123;</div><div class="line">    //do something</div><div class="line">&#125; catch (IOException | XException e) &#123;</div><div class="line">    //handle it</div><div class="line">&#125;</div></pre></td></tr></table></figure><p>注意事项：</p><ul><li>尽量不要捕获类似Exception这样的通用异常，而是应该捕获特定异常。</li><li>不要生吞(swallow)异常。</li><li>e.printStackTrace()是不可取的。在分布式系统中，如果发生异常，你很难判断出到底输出到哪里去了，无法找对堆栈轨迹(stackstrace)。最好使用产品日志，详细的输出到日志系统里。</li><li>处理原则：Throw early,catch late。</li></ul><h1 id="性能角度"><a href="#性能角度" class="headerlink" title="性能角度"></a>性能角度</h1><ol><li>try-catch 代码段会产生额外的性能开销，换个角度说，往往会影响JVM对代码进行优化，所以建议仅捕获有必要的代码段，尽量不要一个大的try包住整段代码。与此同时，利用异常控制代码流程，也不是一个好主意，远比我们通常意义上的条件语句(if/else、switch)要低效。</li><li>Java每实例化一个Exception，都会对当时的栈进行快照，这是一个相对比较重的操作。如果发生的非常频繁，这个开销可就不能忽略了。【<strong>这里有疑问：为什么要生成快照？什么时间销毁呢？期待后续学习能理解和解决</strong>】</li></ol>]]></content>
+    
+    <summary type="html">
+    
+      来自Java核心技术36讲【杨晓峰】，以及一点点自己的看法。
+    
+    </summary>
+    
+      <category term="基础知识" scheme="https://liuzhongpo.github.io/categories/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/"/>
+    
+    
+      <category term="基础知识" scheme="https://liuzhongpo.github.io/tags/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/"/>
+    
+      <category term="Java核心技术36讲" scheme="https://liuzhongpo.github.io/tags/Java%E6%A0%B8%E5%BF%83%E6%8A%80%E6%9C%AF36%E8%AE%B2/"/>
+    
+  </entry>
   
   <entry>
     <title>Java是解释执行吗？</title>
@@ -41,28 +65,6 @@
   </entry>
   
   <entry>
-    <title>【Redis】生产环境启动方案</title>
-    <link href="https://liuzhongpo.github.io/2018/01/31/%E3%80%90Redis%E3%80%91%E7%94%9F%E4%BA%A7%E7%8E%AF%E5%A2%83%E5%90%AF%E5%8A%A8%E6%96%B9%E6%A1%88/"/>
-    <id>https://liuzhongpo.github.io/2018/01/31/【Redis】生产环境启动方案/</id>
-    <published>2018-01-30T16:00:00.000Z</published>
-    <updated>2018-01-31T06:14:16.851Z</updated>
-    
-    <content type="html"><![CDATA[<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;如果一般的学习，随便用<code>redis-server</code>启动一下redis，做一些实验，这样的话，没什么意义。要把redis作为一个系统的daemon进程去运行的，每次系统启动，redis进程一起启动<br>配置步骤：<br>（1）redis <code>utils</code>目录下，有个<code>redis_init_script</code>脚本<br>（2）将<code>redis_init_script</code>脚本拷贝到linux的<code>/etc/init.d</code>目录中，将<code>redis_init_script</code>重命名为<code>redis_6379</code>，6379是我们希望这个redis实例监听的端口号<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">cp redis_init_script /etc/init.d</div><div class="line">cd /etc/init.d</div><div class="line">mv redis_init_script redis_6379</div></pre></td></tr></table></figure></p><p>（3）修改<code>redis_6379</code>脚本的第6行的<code>REDISPORT</code>，设置为相同的端口号（默认就是6379）<br>（4）创建两个目录：<code>/etc/redis</code>（存放redis的配置文件），<code>/var/redis/6379</code>（存放redis的持久化文件）<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">mkdir /etc/redis</div><div class="line">mkdir -p /var/redis/6379</div></pre></td></tr></table></figure></p><p>（5）修改redis配置文件（默认在根目录下，<code>redis.conf</code>），拷贝到<code>/etc/redis</code>目录中，修改名称为<code>6379.conf</code><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">cp redis.conf /etc/redis</div><div class="line">mv redis.conf 6379.conf</div></pre></td></tr></table></figure></p><p>（6）修改<code>redis.conf</code>中的部分配置为生产环境:</p><table><thead><tr><th style="text-align:left">属性</th><th style="text-align:center">值</th><th style="text-align:center">解释</th></tr></thead><tbody><tr><td style="text-align:left">daemonize</td><td style="text-align:center">yes</td><td style="text-align:center">让redis以daemon进程运行</td></tr><tr><td style="text-align:left">pidfile</td><td style="text-align:center">/var/run/redis_6379.pid</td><td style="text-align:center">设置redis的pid文件位置</td></tr><tr><td style="text-align:left">port</td><td style="text-align:center">6379(默认值)</td><td style="text-align:center">设置redis的监听端口号</td></tr><tr><td style="text-align:left">dir</td><td style="text-align:center">/var/redis/6379</td><td style="text-align:center">设置持久化文件的存储位置</td></tr></tbody></table><p>（7）启动redis，执行:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">cd /etc/init.d</div><div class="line">chmod 777 redis_6379</div><div class="line">./redis_6379 start</div></pre></td></tr></table></figure></p><p>（8）确认redis进程是否启动，<code>ps -ef | grep redis</code><br>（9）让redis跟随系统启动自动启动,在<code>redis_6379</code>脚本中，最上面，加入两行注释:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"># chkconfig:   2345 90 10</div><div class="line"># description:  Redis is a persistent key-value database</div></pre></td></tr></table></figure></p><p>（10）执行：<code>chkconfig redis_6379 on</code></p>]]></content>
-    
-    <summary type="html">
-    
-      如果一般的学习，随便用redis-server启动一下redis，做一些实验。这样的话，没什么意义。要把redis作为一个系统的daemon进程去运行的，每次系统启动，redis进程一起启动。
-    
-    </summary>
-    
-      <category term="redis" scheme="https://liuzhongpo.github.io/categories/redis/"/>
-    
-    
-      <category term="redis" scheme="https://liuzhongpo.github.io/tags/redis/"/>
-    
-  </entry>
-  
-  <entry>
     <title>【Redis】安装单机版Redis</title>
     <link href="https://liuzhongpo.github.io/2018/01/31/%E3%80%90Redis%E3%80%91%E5%AE%89%E8%A3%85%E5%8D%95%E6%9C%BA%E7%89%88Redis/"/>
     <id>https://liuzhongpo.github.io/2018/01/31/【Redis】安装单机版Redis/</id>
@@ -83,6 +85,28 @@
       <category term="redis" scheme="https://liuzhongpo.github.io/tags/redis/"/>
     
       <category term="CentOS" scheme="https://liuzhongpo.github.io/tags/CentOS/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>【Redis】生产环境启动方案</title>
+    <link href="https://liuzhongpo.github.io/2018/01/31/%E3%80%90Redis%E3%80%91%E7%94%9F%E4%BA%A7%E7%8E%AF%E5%A2%83%E5%90%AF%E5%8A%A8%E6%96%B9%E6%A1%88/"/>
+    <id>https://liuzhongpo.github.io/2018/01/31/【Redis】生产环境启动方案/</id>
+    <published>2018-01-30T16:00:00.000Z</published>
+    <updated>2018-01-31T06:14:16.851Z</updated>
+    
+    <content type="html"><![CDATA[<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;如果一般的学习，随便用<code>redis-server</code>启动一下redis，做一些实验，这样的话，没什么意义。要把redis作为一个系统的daemon进程去运行的，每次系统启动，redis进程一起启动<br>配置步骤：<br>（1）redis <code>utils</code>目录下，有个<code>redis_init_script</code>脚本<br>（2）将<code>redis_init_script</code>脚本拷贝到linux的<code>/etc/init.d</code>目录中，将<code>redis_init_script</code>重命名为<code>redis_6379</code>，6379是我们希望这个redis实例监听的端口号<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">cp redis_init_script /etc/init.d</div><div class="line">cd /etc/init.d</div><div class="line">mv redis_init_script redis_6379</div></pre></td></tr></table></figure></p><p>（3）修改<code>redis_6379</code>脚本的第6行的<code>REDISPORT</code>，设置为相同的端口号（默认就是6379）<br>（4）创建两个目录：<code>/etc/redis</code>（存放redis的配置文件），<code>/var/redis/6379</code>（存放redis的持久化文件）<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">mkdir /etc/redis</div><div class="line">mkdir -p /var/redis/6379</div></pre></td></tr></table></figure></p><p>（5）修改redis配置文件（默认在根目录下，<code>redis.conf</code>），拷贝到<code>/etc/redis</code>目录中，修改名称为<code>6379.conf</code><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">cp redis.conf /etc/redis</div><div class="line">mv redis.conf 6379.conf</div></pre></td></tr></table></figure></p><p>（6）修改<code>redis.conf</code>中的部分配置为生产环境:</p><table><thead><tr><th style="text-align:left">属性</th><th style="text-align:center">值</th><th style="text-align:center">解释</th></tr></thead><tbody><tr><td style="text-align:left">daemonize</td><td style="text-align:center">yes</td><td style="text-align:center">让redis以daemon进程运行</td></tr><tr><td style="text-align:left">pidfile</td><td style="text-align:center">/var/run/redis_6379.pid</td><td style="text-align:center">设置redis的pid文件位置</td></tr><tr><td style="text-align:left">port</td><td style="text-align:center">6379(默认值)</td><td style="text-align:center">设置redis的监听端口号</td></tr><tr><td style="text-align:left">dir</td><td style="text-align:center">/var/redis/6379</td><td style="text-align:center">设置持久化文件的存储位置</td></tr></tbody></table><p>（7）启动redis，执行:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">cd /etc/init.d</div><div class="line">chmod 777 redis_6379</div><div class="line">./redis_6379 start</div></pre></td></tr></table></figure></p><p>（8）确认redis进程是否启动，<code>ps -ef | grep redis</code><br>（9）让redis跟随系统启动自动启动,在<code>redis_6379</code>脚本中，最上面，加入两行注释:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"># chkconfig:   2345 90 10</div><div class="line"># description:  Redis is a persistent key-value database</div></pre></td></tr></table></figure></p><p>（10）执行：<code>chkconfig redis_6379 on</code></p>]]></content>
+    
+    <summary type="html">
+    
+      如果一般的学习，随便用redis-server启动一下redis，做一些实验。这样的话，没什么意义。要把redis作为一个系统的daemon进程去运行的，每次系统启动，redis进程一起启动。
+    
+    </summary>
+    
+      <category term="redis" scheme="https://liuzhongpo.github.io/categories/redis/"/>
+    
+    
+      <category term="redis" scheme="https://liuzhongpo.github.io/tags/redis/"/>
     
   </entry>
   
