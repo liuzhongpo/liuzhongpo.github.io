@@ -3,6 +3,64 @@
   
     
     <entry>
+      <title><![CDATA[【技术杂技】Lombok]]></title>
+      <url>/2018/11/12/%E3%80%90%E6%8A%80%E6%9C%AF%E6%9D%82%E6%8A%80%E3%80%91lombok/</url>
+      <content type="html"><![CDATA[<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在实际开发中，大家都应该会碰到一个场景：定义大量的entity，然后通过Eclipse或者IDEA去生成其属性的构造器、getter、setter、equals、hashcode、toString方法；当要对某个属性进行改变时，都需要重新生成这些方法，那Java中有没有一种方式能够解决这个问题呢？答案是有，就是lombok。</p>
+<h1 id="Lombok简介"><a href="#Lombok简介" class="headerlink" title="Lombok简介"></a>Lombok简介</h1><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Lombok是一个可以通过简单的注解形式来帮助我们简化消除一些必须有但显得很臃肿的Java代码的工具，通过使用对应的注解，可以在编译源码的时候生成对应的方法。</p>
+<blockquote>
+<p>官方地址：<a href="https://projectlombok.org/" target="_blank" rel="noopener">https://projectlombok.org/</a><br>github地址：<a href="https://github.com/rzwitserloot/lombok" target="_blank" rel="noopener">https://github.com/rzwitserloot/lombok</a></p>
+</blockquote>
+<h1 id="Lombok安装（IDEA）"><a href="#Lombok安装（IDEA）" class="headerlink" title="Lombok安装（IDEA）"></a>Lombok安装（IDEA）</h1><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Settings -&gt; Plugins -&gt; Browse repositories<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <img src="http://s1.wailian.download/2017/11/12/image.png" alt="image.png"><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;等安装完，重启一下。因为我常用IDEA，至于Eclipse安装lombok插件，请自行百度一下。</p>
+<h1 id="Maven依赖"><a href="#Maven依赖" class="headerlink" title="Maven依赖"></a>Maven依赖</h1><figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">&lt;dependency&gt;</div><div class="line">    &lt;groupId&gt;org.projectlombok&lt;/groupId&gt;</div><div class="line">    &lt;artifactId&gt;lombok&lt;/artifactId&gt;</div><div class="line">    &lt;version&gt;1.16.18&lt;/version&gt;</div><div class="line">    &lt;scope&gt;provided&lt;/scope&gt;</div><div class="line">&lt;/dependency&gt;</div></pre></td></tr></table></figure>
+<h1 id="常用注解介绍"><a href="#常用注解介绍" class="headerlink" title="常用注解介绍"></a>常用注解介绍</h1><h2 id="Getter-Setter-Accessors"><a href="#Getter-Setter-Accessors" class="headerlink" title="Getter Setter Accessors"></a>Getter Setter Accessors</h2><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<code>@Getter @Setter</code>修饰任何字段，让lombok自动生成默认的getter / setter方法，默认生成的方法是public的。如果要修改方法修饰符可以设置AccessLevel的值，例如：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@Getter</span>(AccessLevel.PROTECTED)</div></pre></td></tr></table></figure></p>
+<p><code>@Accessors</code> 主要用于控制生成的getter和setter,主要参数介绍：</p>
+<ul>
+<li>fluent boolean值，默认为false。此字段主要为控制生成的getter和setter方法前面是否带get/set</li>
+<li>chain boolean值，默认false。如果设置为true，setter返回的是此对象，方便链式调用方法</li>
+<li>prefix 设置前缀 例如：<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@Accessors</span>(prefix = <span class="string">"abc"</span>) <span class="keyword">private</span> String abcAge ;</div><div class="line"><span class="comment">//当生成get/set方法时，会把此前缀去掉</span></div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="构造器相关"><a href="#构造器相关" class="headerlink" title="构造器相关"></a>构造器相关</h2><ul>
+<li><code>@NoArgsConstructor</code> 生成一个无参构造方法。当类中有final字段没有被初始化时，编译器会报错，此时可用<code>@NoArgsConstructor(force = true)</code>，然后就会为没有初始化的final字段设置默认值 0 / false / null。对于具有约束的字段（例如<code>@NonNull</code>字段），不会生成检查或分配，因此请注意，正确初始化这些字段之前，这些约束无效。</li>
+<li><p><code>@RequiredArgsConstructor</code> 会生成构造方法（可能带参数也可能不带参数），如果带参数，这参数只能是以final修饰的未经初始化的字段，或者是以<code>@NonNull</code>注解的未经初始化的字段.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@RequiredArgsConstructor</span>(staticName = <span class="string">"of"</span>)</div><div class="line"><span class="comment">// 会生成一个of()的静态方法，并把构造方法设置为私有的</span></div></pre></td></tr></table></figure>
+</li>
+<li><p><code>@AllArgsConstructor</code> 生成一个全参数的构造方法</p>
+</li>
+</ul>
+<h2 id="ToString"><a href="#ToString" class="headerlink" title="ToString"></a>ToString</h2><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<code>ToString</code>生成toString()方法，默认情况下，会按顺序 （以逗号分隔）打印你的类名称以及每个字段，例如：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">User(id=<span class="keyword">null</span>, name=<span class="keyword">null</span>, age=<span class="keyword">null</span>)</div></pre></td></tr></table></figure></p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;可以这样设置不包含哪些字段，例如：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@ToString</span>(exclude = <span class="string">"id"</span>) </div><div class="line"><span class="meta">@ToString</span>(exclude = &#123;<span class="string">"id"</span>,<span class="string">"name"</span>&#125;)</div></pre></td></tr></table></figure></p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;如果继承的有父类的话，可以设置callSuper 让其调用父类的toString()方法，例如：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@ToString</span>(callSuper = <span class="keyword">true</span>)</div></pre></td></tr></table></figure></p>
+<h2 id="Equals-amp-HashCode"><a href="#Equals-amp-HashCode" class="headerlink" title="Equals&amp;HashCode"></a>Equals&amp;HashCode</h2><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<code>@EqualsAndHashCode</code>，生成hashCode()和equals()方法，默认情况下，它将使用所有非静态，非transient字段。但可以通过在可选的exclude参数中来排除更多字段。或者，通过在parameter参数中命名它们来准确指定希望使用哪些字段。</p>
+<h2 id="Data"><a href="#Data" class="headerlink" title="Data"></a>Data</h2><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<code>@Data</code>包含了<code>@ToString</code>，<code>@EqualsAndHashCode</code>，<code>@Getter</code> / <code>@Setter</code>和<code>@RequiredArgsConstructor</code>的功能</p>
+<h2 id="其他注解"><a href="#其他注解" class="headerlink" title="其他注解"></a>其他注解</h2><p><code>@Synchronized</code>：给方法加上同步锁<br><code>@Wither</code> ：提供了给final字段赋值的一种方法<br><code>@onX</code> ： 在注解里面添加注解的方式<br><code>@Builder</code>：为你的类生成复杂的构建器API。<br><code>@Delegate</code>：这个注解也是相当的牛逼，它会该类生成一些列的方法，这些方法都来自与List接口<br><code>@Log4j</code> ：注解在类上；为类提供一个 属性名为log 的 log4j 日志对象<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;其他注解，查询官方文档。</p>
+<h1 id="Lombok问题"><a href="#Lombok问题" class="headerlink" title="Lombok问题"></a>Lombok问题</h1><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Lombok 很强大，是生产力神器，语法设计合理易用，当然也很邪恶。从原理上来说，Lombok的魔法就在于其修改了AST(抽象语法树)，分析和生成class阶段使用了修改后的AST，也就最终改变了生成的字节码文件。所以说，它甚至在某种程度上重新定义了 Java 本身的语法（写法），而这种“非官方”的重定义是不是会带来一系列问题也未可知，只能实践求证。以下是我开发中碰到的一些问题：</p>
+<ul>
+<li>无法支持多种参数构造器的重载</li>
+<li>大大降低了源代码文件的可读性和完整性，降低了阅读源代码的舒适度</li>
+<li>代码易手时带来的注解冲突、Java新手的掌握成本等等一系列问题</li>
+<li>奇淫巧技，使用会有争议</li>
+</ul>
+]]></content>
+      
+        <categories>
+            
+            <category> 技术杂技 </category>
+            
+        </categories>
+        
+        
+        <tags>
+            
+            <tag> 技术杂技 </tag>
+            
+            <tag> tool </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
       <title><![CDATA[volatile关键字]]></title>
       <url>/2018/10/24/volatile%E5%85%B3%E9%94%AE%E5%AD%97/</url>
       <content type="html"><![CDATA[<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;volatile关键字，在Java5之前是一个备受争议的关键字，因为在程序中使用它往往会导致出人意料的结果。在Java5之后，volatile关键字重获生机。volatile关键字是与Java内存模型有关的，要对内存模型和并发编程的概念有一定的了解，所以，在使用方面不是一件容易的事情。同时，此文大部分参考了这位大神的<a href="http://www.cnblogs.com/dolphin0520/p/3920373.html" target="_blank" rel="noopener">volatile关键字解析</a>。</p>
@@ -184,41 +242,6 @@
     </entry>
     
     <entry>
-      <title><![CDATA[【Redis】安装单机版Redis]]></title>
-      <url>/2018/01/31/%E3%80%90Redis%E3%80%91%E5%AE%89%E8%A3%85%E5%8D%95%E6%9C%BA%E7%89%88Redis/</url>
-      <content type="html"><![CDATA[<p>官网下载redis安装包，这里使用：<code>redis-3.2.8.tar.gz</code>。安装在<strong>/usr/local</strong>下。</p>
-<h1 id="安装-tcl"><a href="#安装-tcl" class="headerlink" title="安装 tcl"></a>安装 tcl</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">wget http://downloads.sourceforge.net/tcl/tcl8.6.1-src.tar.gz</div><div class="line">tar -xzvf tcl8.6.1-src.tar.gz</div><div class="line">cd  /usr/local/tcl8.6.1/unix/</div><div class="line">./configure  </div><div class="line">make &amp;&amp; make install</div></pre></td></tr></table></figure>
-<h1 id="安装Redis"><a href="#安装Redis" class="headerlink" title="安装Redis"></a>安装Redis</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">tar -zxvf redis-3.2.8.tar.gz</div><div class="line">cd redis-3.2.8</div><div class="line">make </div><div class="line">make test</div><div class="line">make install</div></pre></td></tr></table></figure>
-<h1 id="问题解决"><a href="#问题解决" class="headerlink" title="问题解决"></a>问题解决</h1><h2 id="make出错"><a href="#make出错" class="headerlink" title="make出错"></a>make出错</h2><p>解决办法：<strong>安装gcc</strong><br>步骤：</p>
-<ul>
-<li>能上网：</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">yum install gcc-c++</div></pre></td></tr></table></figure>
-<ul>
-<li>不能上网:<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="http://www.wailian.work/images/2018/01/31/image.png" alt="image.png"></li>
-</ul>
-<h2 id="二次-make出错"><a href="#二次-make出错" class="headerlink" title="二次 make出错"></a>二次 make出错</h2><p>提示：<strong>Jemalloc/jemalloc.h：没有那个文件或目录</strong><br>解决办法：运行<code>make distclean</code>之后再<code>make</code></p>
-<h2 id="make-test出错"><a href="#make-test出错" class="headerlink" title="make test出错"></a>make test出错</h2><p>报如下错误，不过不影响安装。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">!!! WARNING The following tests failed:</div><div class="line"></div><div class="line">*** [err]: Server is able to generate a stack trace on selected systems in tests/integration/logging.tcl</div><div class="line">expected stack trace not found into log file</div><div class="line">Cleanup: may take some time... OK</div><div class="line">make[1]: *** [test] Error 1</div><div class="line">make[1]: Leaving directory `/usr/local/redis-3.2.8/src&apos;</div><div class="line">make: *** [test] Error 2</div></pre></td></tr></table></figure>]]></content>
-      
-        <categories>
-            
-            <category> redis </category>
-            
-        </categories>
-        
-        
-        <tags>
-            
-            <tag> redis </tag>
-            
-            <tag> CentOS </tag>
-            
-        </tags>
-        
-    </entry>
-    
-    <entry>
       <title><![CDATA[【Redis】生产环境启动方案]]></title>
       <url>/2018/01/31/%E3%80%90Redis%E3%80%91%E7%94%9F%E4%BA%A7%E7%8E%AF%E5%A2%83%E5%90%AF%E5%8A%A8%E6%96%B9%E6%A1%88/</url>
       <content type="html"><![CDATA[<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;如果一般的学习，随便用<code>redis-server</code>启动一下redis，做一些实验，这样的话，没什么意义。要把redis作为一个系统的daemon进程去运行的，每次系统启动，redis进程一起启动<br>配置步骤：<br>（1）redis <code>utils</code>目录下，有个<code>redis_init_script</code>脚本<br>（2）将<code>redis_init_script</code>脚本拷贝到linux的<code>/etc/init.d</code>目录中，将<code>redis_init_script</code>重命名为<code>redis_6379</code>，6379是我们希望这个redis实例监听的端口号<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">cp redis_init_script /etc/init.d</div><div class="line">cd /etc/init.d</div><div class="line">mv redis_init_script redis_6379</div></pre></td></tr></table></figure></p>
@@ -271,6 +294,41 @@
         <tags>
             
             <tag> redis </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
+      <title><![CDATA[【Redis】安装单机版Redis]]></title>
+      <url>/2018/01/31/%E3%80%90Redis%E3%80%91%E5%AE%89%E8%A3%85%E5%8D%95%E6%9C%BA%E7%89%88Redis/</url>
+      <content type="html"><![CDATA[<p>官网下载redis安装包，这里使用：<code>redis-3.2.8.tar.gz</code>。安装在<strong>/usr/local</strong>下。</p>
+<h1 id="安装-tcl"><a href="#安装-tcl" class="headerlink" title="安装 tcl"></a>安装 tcl</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">wget http://downloads.sourceforge.net/tcl/tcl8.6.1-src.tar.gz</div><div class="line">tar -xzvf tcl8.6.1-src.tar.gz</div><div class="line">cd  /usr/local/tcl8.6.1/unix/</div><div class="line">./configure  </div><div class="line">make &amp;&amp; make install</div></pre></td></tr></table></figure>
+<h1 id="安装Redis"><a href="#安装Redis" class="headerlink" title="安装Redis"></a>安装Redis</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">tar -zxvf redis-3.2.8.tar.gz</div><div class="line">cd redis-3.2.8</div><div class="line">make </div><div class="line">make test</div><div class="line">make install</div></pre></td></tr></table></figure>
+<h1 id="问题解决"><a href="#问题解决" class="headerlink" title="问题解决"></a>问题解决</h1><h2 id="make出错"><a href="#make出错" class="headerlink" title="make出错"></a>make出错</h2><p>解决办法：<strong>安装gcc</strong><br>步骤：</p>
+<ul>
+<li>能上网：</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">yum install gcc-c++</div></pre></td></tr></table></figure>
+<ul>
+<li>不能上网:<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="http://www.wailian.work/images/2018/01/31/image.png" alt="image.png"></li>
+</ul>
+<h2 id="二次-make出错"><a href="#二次-make出错" class="headerlink" title="二次 make出错"></a>二次 make出错</h2><p>提示：<strong>Jemalloc/jemalloc.h：没有那个文件或目录</strong><br>解决办法：运行<code>make distclean</code>之后再<code>make</code></p>
+<h2 id="make-test出错"><a href="#make-test出错" class="headerlink" title="make test出错"></a>make test出错</h2><p>报如下错误，不过不影响安装。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">!!! WARNING The following tests failed:</div><div class="line"></div><div class="line">*** [err]: Server is able to generate a stack trace on selected systems in tests/integration/logging.tcl</div><div class="line">expected stack trace not found into log file</div><div class="line">Cleanup: may take some time... OK</div><div class="line">make[1]: *** [test] Error 1</div><div class="line">make[1]: Leaving directory `/usr/local/redis-3.2.8/src&apos;</div><div class="line">make: *** [test] Error 2</div></pre></td></tr></table></figure>]]></content>
+      
+        <categories>
+            
+            <category> redis </category>
+            
+        </categories>
+        
+        
+        <tags>
+            
+            <tag> redis </tag>
+            
+            <tag> CentOS </tag>
             
         </tags>
         
@@ -568,67 +626,9 @@
         
         <tags>
             
-            <tag> 多线程 </tag>
-            
             <tag> 设计模式 </tag>
             
-        </tags>
-        
-    </entry>
-    
-    <entry>
-      <title><![CDATA[【技术杂技】Lombok]]></title>
-      <url>/2017/11/12/%E3%80%90%E6%8A%80%E6%9C%AF%E6%9D%82%E6%8A%80%E3%80%91lombok/</url>
-      <content type="html"><![CDATA[<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在实际开发中，大家都应该会碰到一个场景：定义大量的entity，然后通过Eclipse或者IDEA去生成其属性的构造器、getter、setter、equals、hashcode、toString方法；当要对某个属性进行改变时，都需要重新生成这些方法，那Java中有没有一种方式能够解决这个问题呢？答案是有，就是lombok。</p>
-<h1 id="Lombok简介"><a href="#Lombok简介" class="headerlink" title="Lombok简介"></a>Lombok简介</h1><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Lombok是一个可以通过简单的注解形式来帮助我们简化消除一些必须有但显得很臃肿的Java代码的工具，通过使用对应的注解，可以在编译源码的时候生成对应的方法。</p>
-<blockquote>
-<p>官方地址：<a href="https://projectlombok.org/" target="_blank" rel="noopener">https://projectlombok.org/</a><br>github地址：<a href="https://github.com/rzwitserloot/lombok" target="_blank" rel="noopener">https://github.com/rzwitserloot/lombok</a></p>
-</blockquote>
-<h1 id="Lombok安装（IDEA）"><a href="#Lombok安装（IDEA）" class="headerlink" title="Lombok安装（IDEA）"></a>Lombok安装（IDEA）</h1><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Settings -&gt; Plugins -&gt; Browse repositories<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <img src="http://s1.wailian.download/2017/11/12/image.png" alt="image.png"><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;等安装完，重启一下。因为我常用IDEA，至于Eclipse安装lombok插件，请自行百度一下。</p>
-<h1 id="Maven依赖"><a href="#Maven依赖" class="headerlink" title="Maven依赖"></a>Maven依赖</h1><figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">&lt;dependency&gt;</div><div class="line">    &lt;groupId&gt;org.projectlombok&lt;/groupId&gt;</div><div class="line">    &lt;artifactId&gt;lombok&lt;/artifactId&gt;</div><div class="line">    &lt;version&gt;1.16.18&lt;/version&gt;</div><div class="line">    &lt;scope&gt;provided&lt;/scope&gt;</div><div class="line">&lt;/dependency&gt;</div></pre></td></tr></table></figure>
-<h1 id="常用注解介绍"><a href="#常用注解介绍" class="headerlink" title="常用注解介绍"></a>常用注解介绍</h1><h2 id="Getter-Setter-Accessors"><a href="#Getter-Setter-Accessors" class="headerlink" title="Getter Setter Accessors"></a>Getter Setter Accessors</h2><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<code>@Getter @Setter</code>修饰任何字段，让lombok自动生成默认的getter / setter方法，默认生成的方法是public的。如果要修改方法修饰符可以设置AccessLevel的值，例如：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@Getter</span>(AccessLevel.PROTECTED)</div></pre></td></tr></table></figure></p>
-<p><code>@Accessors</code> 主要用于控制生成的getter和setter,主要参数介绍：</p>
-<ul>
-<li>fluent boolean值，默认为false。此字段主要为控制生成的getter和setter方法前面是否带get/set</li>
-<li>chain boolean值，默认false。如果设置为true，setter返回的是此对象，方便链式调用方法</li>
-<li>prefix 设置前缀 例如：<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@Accessors</span>(prefix = <span class="string">"abc"</span>) <span class="keyword">private</span> String abcAge ;</div><div class="line"><span class="comment">//当生成get/set方法时，会把此前缀去掉</span></div></pre></td></tr></table></figure>
-</li>
-</ul>
-<h2 id="构造器相关"><a href="#构造器相关" class="headerlink" title="构造器相关"></a>构造器相关</h2><ul>
-<li><code>@NoArgsConstructor</code> 生成一个无参构造方法。当类中有final字段没有被初始化时，编译器会报错，此时可用<code>@NoArgsConstructor(force = true)</code>，然后就会为没有初始化的final字段设置默认值 0 / false / null。对于具有约束的字段（例如<code>@NonNull</code>字段），不会生成检查或分配，因此请注意，正确初始化这些字段之前，这些约束无效。</li>
-<li><p><code>@RequiredArgsConstructor</code> 会生成构造方法（可能带参数也可能不带参数），如果带参数，这参数只能是以final修饰的未经初始化的字段，或者是以<code>@NonNull</code>注解的未经初始化的字段.</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@RequiredArgsConstructor</span>(staticName = <span class="string">"of"</span>)</div><div class="line"><span class="comment">// 会生成一个of()的静态方法，并把构造方法设置为私有的</span></div></pre></td></tr></table></figure>
-</li>
-<li><p><code>@AllArgsConstructor</code> 生成一个全参数的构造方法</p>
-</li>
-</ul>
-<h2 id="ToString"><a href="#ToString" class="headerlink" title="ToString"></a>ToString</h2><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<code>ToString</code>生成toString()方法，默认情况下，会按顺序 （以逗号分隔）打印你的类名称以及每个字段，例如：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">User(id=<span class="keyword">null</span>, name=<span class="keyword">null</span>, age=<span class="keyword">null</span>)</div></pre></td></tr></table></figure></p>
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;可以这样设置不包含哪些字段，例如：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@ToString</span>(exclude = <span class="string">"id"</span>) </div><div class="line"><span class="meta">@ToString</span>(exclude = &#123;<span class="string">"id"</span>,<span class="string">"name"</span>&#125;)</div></pre></td></tr></table></figure></p>
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;如果继承的有父类的话，可以设置callSuper 让其调用父类的toString()方法，例如：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@ToString</span>(callSuper = <span class="keyword">true</span>)</div></pre></td></tr></table></figure></p>
-<h2 id="Equals-amp-HashCode"><a href="#Equals-amp-HashCode" class="headerlink" title="Equals&amp;HashCode"></a>Equals&amp;HashCode</h2><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<code>@EqualsAndHashCode</code>，生成hashCode()和equals()方法，默认情况下，它将使用所有非静态，非transient字段。但可以通过在可选的exclude参数中来排除更多字段。或者，通过在parameter参数中命名它们来准确指定希望使用哪些字段。</p>
-<h2 id="Data"><a href="#Data" class="headerlink" title="Data"></a>Data</h2><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<code>@Data</code>包含了<code>@ToString</code>，<code>@EqualsAndHashCode</code>，<code>@Getter</code> / <code>@Setter</code>和<code>@RequiredArgsConstructor</code>的功能</p>
-<h2 id="其他注解"><a href="#其他注解" class="headerlink" title="其他注解"></a>其他注解</h2><p><code>@Synchronized</code>：给方法加上同步锁<br><code>@Wither</code> ：提供了给final字段赋值的一种方法<br><code>@onX</code> ： 在注解里面添加注解的方式<br><code>@Builder</code>：为你的类生成复杂的构建器API。<br><code>@Delegate</code>：这个注解也是相当的牛逼，它会该类生成一些列的方法，这些方法都来自与List接口<br><code>@Log4j</code> ：注解在类上；为类提供一个 属性名为log 的 log4j 日志对象<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;其他注解，查询官方文档。</p>
-<h1 id="Lombok问题"><a href="#Lombok问题" class="headerlink" title="Lombok问题"></a>Lombok问题</h1><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Lombok 很强大，是生产力神器，语法设计合理易用，当然也很邪恶。从原理上来说，Lombok的魔法就在于其修改了AST(抽象语法树)，分析和生成class阶段使用了修改后的AST，也就最终改变了生成的字节码文件。所以说，它甚至在某种程度上重新定义了 Java 本身的语法（写法），而这种“非官方”的重定义是不是会带来一系列问题也未可知，只能实践求证。以下是我开发中碰到的一些问题：</p>
-<ul>
-<li>无法支持多种参数构造器的重载</li>
-<li>大大降低了源代码文件的可读性和完整性，降低了阅读源代码的舒适度</li>
-<li>代码易手时带来的注解冲突、Java新手的掌握成本等等一系列问题</li>
-<li>奇淫巧技，使用会有争议</li>
-</ul>
-]]></content>
-      
-        <categories>
-            
-            <category> 技术杂技 </category>
-            
-        </categories>
-        
-        
-        <tags>
-            
-            <tag> 技术杂技 </tag>
-            
-            <tag> tool </tag>
+            <tag> 多线程 </tag>
             
         </tags>
         
