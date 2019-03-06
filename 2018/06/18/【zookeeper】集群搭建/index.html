@@ -14,20 +14,22 @@
 <meta name="author" content="lzp" />
 
 
-    
-    
 
-
-<meta name="description" content="愿清澈如莲，愿自由如风，愿爱如少年">
-<meta property="og:type" content="website">
-<meta property="og:title" content="LZP BLOG">
-<meta property="og:url" content="https://liuzhongpo.github.io/page/3/index.html">
+<meta name="description" content="zookeeper集群搭建。">
+<meta name="keywords" content="zookeeper">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【zookeeper】集群搭建">
+<meta property="og:url" content="https://liuzhongpo.github.io/2018/06/18/【zookeeper】集群搭建/index.html">
 <meta property="og:site_name" content="LZP BLOG">
-<meta property="og:description" content="愿清澈如莲，愿自由如风，愿爱如少年">
+<meta property="og:description" content="zookeeper集群搭建。">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://s1.wailian.download/2018/01/20/image.png">
+<meta property="og:image" content="http://s1.wailian.download/2018/01/20/image650e2.png">
+<meta property="og:updated_time" content="2019-03-06T14:07:31.275Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="LZP BLOG">
-<meta name="twitter:description" content="愿清澈如莲，愿自由如风，愿爱如少年">
+<meta name="twitter:title" content="【zookeeper】集群搭建">
+<meta name="twitter:description" content="zookeeper集群搭建。">
+<meta name="twitter:image" content="http://s1.wailian.download/2018/01/20/image.png">
 
 <link rel="apple-touch-icon" href= "/apple-touch-icon.png">
 
@@ -57,7 +59,7 @@
 <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
 
 
-<title>LZP BLOG</title>
+<title>【zookeeper】集群搭建 | LZP BLOG</title>
 
 <script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
 <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
@@ -66,8 +68,8 @@
     var yiliaConfig = {
         fancybox: true,
         animate: false,
-        isHome: true,
-        isPost: false,
+        isHome: false,
+        isPost: true,
         isArchive: false,
         isTag: false,
         isCategory: false,
@@ -259,13 +261,11 @@
     </div>
     <link class="menu-list" tags="标签" friends="友情链接" about="关于我"/>
 </nav>
-      <div class="body-wrap">
-  
-    <article id="post-【设计模式】单例模式" class="article article-type-post" itemscope itemprop="blogPost">
+      <div class="body-wrap"><article id="post-【zookeeper】集群搭建" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2018/05/12/【设计模式】单例模式/" class="article-date">
-      <time datetime="2018-05-11T16:00:00.000Z" itemprop="datePublished">2018-05-12</time>
+      <a href="/2018/06/18/【zookeeper】集群搭建/" class="article-date">
+      <time datetime="2018-06-17T16:00:00.000Z" itemprop="datePublished">2018-06-18</time>
 </a>
 
 
@@ -279,197 +279,212 @@
       <header class="article-header">
         
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/05/12/【设计模式】单例模式/">【设计模式】单例模式</a>
+    <h1 class="article-title" itemprop="name">
+      【zookeeper】集群搭建
     </h1>
   
 
       </header>
       
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-              老生常谈，记录单例模式常见的几种写法。加班太疯狂，许久没更新博客。这次完善一下单例模式。
-          
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/设计模式/">设计模式</a>
-    </div>
-
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/多线程/">多线程</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/设计模式/">设计模式</a></li></ul>
-    </div>
-
-      
-        <p class="article-more-link">
-          <a href="/2018/05/12/【设计模式】单例模式/#more">阅读全文 >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-线程创建的4种方式" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2017/11/10/线程创建的4种方式/" class="article-date">
-      <time datetime="2017-11-09T16:00:00.000Z" itemprop="datePublished">2017-11-10</time>
-</a>
-
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
+      <div class="article-info article-info-post">
         
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/11/10/线程创建的4种方式/">线程创建的4种方式</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-              上次技术分享会，分享了一些并发常用的设计模型，其中刚好涉及futuer模式，这与线程的一种方式相关，汇总一下线程的创建方式。
-          
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
     <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/多线程/">多线程</a>
+    <a class="article-category-link" href="/categories/zookeeper/">zookeeper</a>
     </div>
 
 
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/多线程/">多线程</a></li></ul>
-    </div>
-
-      
-        <p class="article-more-link">
-          <a href="/2017/11/10/线程创建的4种方式/#more">阅读全文 >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-Java synchronized关键字" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2017/10/21/Java synchronized关键字/" class="article-date">
-      <time datetime="2017-10-20T16:00:00.000Z" itemprop="datePublished">2017-10-21</time>
-</a>
-
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
         
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/10/21/Java synchronized关键字/">synchronized关键字</a>
-    </h1>
-  
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/zookeeper/">zookeeper</a></li></ul>
+    </div>
 
-      </header>
+        <div class="clearfix"></div>
+      </div>
       
     
     <div class="article-entry" itemprop="articleBody">
       
           
-              总结synchronized的用法以及碰到的问题
-          
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/多线程/">多线程</a>
-    </div>
+        <ul>
+<li>前提条件：3台虚拟机，zookeeper压缩包</li>
+</ul>
+<h1 id="搭建步骤"><a href="#搭建步骤" class="headerlink" title="搭建步骤"></a>搭建步骤</h1><p>以下流程，在集群的机器上都做一遍。<br>1、在zookeeper下创建mydata文件夹<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mkdir mydata</div></pre></td></tr></table></figure></p>
+<p>2、进入 zookeeper下的conf文件夹，新建 zoo.cfg文件（拷贝zoo_sample.cfg）<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">cp zoo_sample.cfg zoo.cfg</div></pre></td></tr></table></figure></p>
+<p>3、编辑zoo.cfg<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">vim zoo.cfg</div></pre></td></tr></table></figure></p>
+<ul>
+<li>修改datadir为前面mydata的路径，可以利用pwd查看</li>
+<li>在最后面添加server的列表<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">server.0=192.168.40.40:2008:6008  </div><div class="line">server.1=192.168.40.41:2008:6008  </div><div class="line">server.2=192.168.40.42:2008:6008</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>4、在各自mydata下面创建myid的文件，在里面写入server的数字(根据ip对应的server.?的?)<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">vim myid</div></pre></td></tr></table></figure></p>
+<p>5、启动zookeeper</p>
+<ul>
+<li>启动命令：</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">./zkServer.sh start</div></pre></td></tr></table></figure>
+<ul>
+<li>查看状态：</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">/zkServer.sh status</div></pre></td></tr></table></figure>
+<p><img src="http://s1.wailian.download/2018/01/20/image.png" alt="image.png"><br><img src="http://s1.wailian.download/2018/01/20/image650e2.png" alt="image650e2.png"></p>
+<h1 id="server列表解释"><a href="#server列表解释" class="headerlink" title="server列表解释"></a>server列表解释</h1><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;服务器名称与地址：集群信息（服务器编号，服务器地址，LF通信端口，选举端口）。这个配置项的书写格式比较特殊，规则如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">server.N=YYY:A:B</div></pre></td></tr></table></figure></p>
+<ul>
+<li>N表示服务器编号</li>
+<li>YYY表示服务器的IP地址</li>
+<li>A为LF通信端口，表示该服务器与集群中的leader交换的信息的端口</li>
+<li>B为选举端口，表示选举新leader时服务器间相互通信的端口（当leader挂掉时，其余服务器会相互通信，选择出新的leader）</li>
+</ul>
+<h1 id="zookeeper异常"><a href="#zookeeper异常" class="headerlink" title="zookeeper异常"></a>zookeeper异常</h1><p>Zookeeper启动异常：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Error contacting service. It is probably not running.</div></pre></td></tr></table></figure></p>
+<p>可能原因：</p>
+<ol>
+<li>重试几次，要是还失败，就可能是下面的原因</li>
+<li>zoo.cfg配置文件有问题</li>
+<li>zoo.cfg配置文件中指定目录却没有创建！ 创建相应目录即可。</li>
+<li><p>zoo.cfg中dataDir指定路径为myid文件的路径。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">myid内容与：server.?=localhost:2888:3888 中你所设置？一致！</div></pre></td></tr></table></figure>
+</li>
+<li><p>使用<code>service iptables stop</code> 关闭防火墙,使用<code>service iptables status</code>确认</p>
+</li>
+</ol>
 
-
       
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/synchronized/">synchronized</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/多线程/">多线程</a></li></ul>
-    </div>
-
-      
-        <p class="article-more-link">
-          <a href="/2017/10/21/Java synchronized关键字/#more">阅读全文 >></a>
-        </p>
-      
-      <div class="clearfix"></div>
     </div>
     
   </div>
   
-</article>
+    
+    <div class="copyright">
+        <p><span>本文标题:</span><a href="/2018/06/18/【zookeeper】集群搭建/">【zookeeper】集群搭建</a></p>
+        <p><span>文章作者:</span><a href="/" title="回到主页">lzp</a></p>
+        <p><span>发布时间:</span>2018-06-18, 00:00:00</p>
+        <p><span>最后更新:</span>2019-03-06, 22:07:31</p>
+        <p>
+            <span>原始链接:</span><a class="post-url" href="/2018/06/18/【zookeeper】集群搭建/" title="【zookeeper】集群搭建">https://liuzhongpo.github.io/2018/06/18/【zookeeper】集群搭建/</a>
+            <span class="copy-path" data-clipboard-text="原文: https://liuzhongpo.github.io/2018/06/18/【zookeeper】集群搭建/　　作者: lzp" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <script> var clipboard = new Clipboard('.copy-path'); </script>
+        </p>
+        <p>
+            <span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
+        </p>
+    </div>
 
 
 
-
-
-
-
-
-
-  
-  
-    <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/page/2/">&laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span>
+    <nav id="article-nav">
+        
+            <div id="article-nav-newer" class="article-nav-title">
+                <a href="/2018/06/21/【zookeeper】Curator基础/">
+                    【zookeeper】Curator基础
+                </a>
+            </div>
+        
+        
+            <div id="article-nav-older" class="article-nav-title">
+                <a href="/2018/06/08/【zookeeper】基础知识以及操作/">
+                    【zookeeper】基础知识及操作
+                </a>
+            </div>
+        
     </nav>
+
   
+</article>
+
+    <div id="toc" class="toc-article">
+        <strong class="toc-title">文章目录</strong>
+        
+            <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#搭建步骤"><span class="toc-number">1.</span> <span class="toc-text">搭建步骤</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#server列表解释"><span class="toc-number">2.</span> <span class="toc-text">server列表解释</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#zookeeper异常"><span class="toc-number">3.</span> <span class="toc-text">zookeeper异常</span></a></li></ol>
+        
+    </div>
+    <style>
+        .left-col .switch-btn,
+        .left-col .switch-area {
+            display: none;
+        }
+        .toc-level-3 i,
+        .toc-level-3 ol {
+            display: none !important;
+        }
+    </style>
+
+    <input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">
+
+    <script>
+        yiliaConfig.toc = ["隐藏目录", "显示目录", !!"false"];
+    </script>
+
+
+
+    
+<div class="share">
+    
+        <div class="bdsharebuttonbox">
+            <a href="#" class="fa fa-twitter bds_twi" data-cmd="twi" title="分享到推特"></a>
+            <a href="#" class="fa fa-weibo bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+            <a href="#" class="fa fa-qq bds_sqq" data-cmd="sqq" title="分享给 QQ 好友"></a>
+            <a href="#" class="fa fa-files-o bds_copy" data-cmd="copy" title="复制网址"></a>
+            <a href="#" class="fa fa fa-envelope-o bds_mail" data-cmd="mail" title="通过邮件分享"></a>
+            <a href="#" class="fa fa-weixin bds_weixin" data-cmd="weixin" title="生成文章二维码"></a>
+            <a href="#" class="fa fa-share-alt bds_more" data-cmd="more"></i></a>
+        </div>
+        <script>
+            window._bd_share_config={
+                "common":{"bdSnsKey":{},"bdText":"【zookeeper】集群搭建　| LZP BLOG　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+        </script>
+    
+
+    
+</div>
+
+
+
+
+
+
+
+    
+        <section class="youyan" id="comments">
+    <script>
+        var loadComment = function(){
+            var d = document, s = d.createElement('script');
+            s.src = 'http://v2.uyan.cc/code/uyan.js?uid=2144710';
+            (d.head || d.body).appendChild(s);
+        }
+    </script>
+    
+    <script> loadComment(); </script>
+
+    <div id="uyan_frame"></div>
+</section>
+    
+
+
+
+
+    <div class="scroll" id="post-nav-button">
+        
+            <a href="/2018/06/21/【zookeeper】Curator基础/" title="上一篇: 【zookeeper】Curator基础">
+                <i class="fa fa-angle-left"></i>
+            </a>
+        
+
+        <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
+
+        
+            <a href="/2018/06/08/【zookeeper】基础知识以及操作/" title="下一篇: 【zookeeper】基础知识及操作">
+                <i class="fa fa-angle-right"></i>
+            </a>
+        
+    </div>
+
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2019/03/02/【Redis】Redis Replication（主从复制）/">【Redis】Redis Replication（主从复制）</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/01/31/【Redis】生产环境启动方案/">【Redis】生产环境启动方案</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/01/26/【Redis】安装单机版Redis/">【Redis】安装单机版Redis</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/11/12/【技术杂技】lombok/">【技术杂技】Lombok</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/10/24/volatile关键字/">volatile关键字</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/29/Netty笔记(一)：Hello Netty/">【Netty】Hello Netty</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/06/26/【zookeeper】Curator实现基于zookeeper的分布式锁/">【zookeeper】Curator实现基于zookeeper的分布式锁</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/06/21/【zookeeper】Curator基础/">【zookeeper】Curator基础</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/06/18/【zookeeper】集群搭建/">【zookeeper】集群搭建</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/06/08/【zookeeper】基础知识以及操作/">【zookeeper】基础知识及操作</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/12/【设计模式】单例模式/">【设计模式】单例模式</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/10/线程创建的4种方式/">线程创建的4种方式</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/21/Java synchronized关键字/">synchronized关键字</a></li></ul>
+
+
+
+
+    <script>
+        
+    </script>
 </div>
       <footer id="footer">
     <div class="outer">
