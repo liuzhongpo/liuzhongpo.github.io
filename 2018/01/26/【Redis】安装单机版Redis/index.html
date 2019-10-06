@@ -15,16 +15,20 @@
 
 
 
-<meta name="description" content="愿清澈如莲，愿自由如风，愿爱如少年">
-<meta property="og:type" content="website">
-<meta property="og:title" content="LZP BLOG">
-<meta property="og:url" content="https://liuzhongpo.github.io/categories/zookeeper/index.html">
+<meta name="description" content="安装单机版的Redis。最近接触了很多redis场景和配置，碰到很多生产和测试环境的各种问题，现在来重现以及解决。">
+<meta name="keywords" content="redis,CentOS">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【Redis】安装单机版Redis">
+<meta property="og:url" content="https://liuzhongpo.github.io/2018/01/26/【Redis】安装单机版Redis/index.html">
 <meta property="og:site_name" content="LZP BLOG">
-<meta property="og:description" content="愿清澈如莲，愿自由如风，愿爱如少年">
+<meta property="og:description" content="安装单机版的Redis。最近接触了很多redis场景和配置，碰到很多生产和测试环境的各种问题，现在来重现以及解决。">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://www.wailian.work/images/2018/01/31/image.png">
+<meta property="og:updated_time" content="2019-10-06T01:44:47.644Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="LZP BLOG">
-<meta name="twitter:description" content="愿清澈如莲，愿自由如风，愿爱如少年">
+<meta name="twitter:title" content="【Redis】安装单机版Redis">
+<meta name="twitter:description" content="安装单机版的Redis。最近接触了很多redis场景和配置，碰到很多生产和测试环境的各种问题，现在来重现以及解决。">
+<meta name="twitter:image" content="http://www.wailian.work/images/2018/01/31/image.png">
 
 <link rel="apple-touch-icon" href= "/apple-touch-icon.png">
 
@@ -54,7 +58,7 @@
 <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
 
 
-<title>Category: zookeeper | LZP BLOG</title>
+<title>【Redis】安装单机版Redis | LZP BLOG</title>
 
 <script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
 <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
@@ -64,10 +68,10 @@
         fancybox: true,
         animate: false,
         isHome: false,
-        isPost: false,
+        isPost: true,
         isArchive: false,
         isTag: false,
-        isCategory: true,
+        isCategory: false,
         fancybox_js: "//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.js",
         scrollreveal: "//cdn.bootcss.com/scrollReveal.js/3.1.4/scrollreveal.min.js",
         search: true
@@ -256,171 +260,202 @@
     </div>
     <link class="menu-list" tags="标签" friends="友情链接" about="关于我"/>
 </nav>
-      <div class="body-wrap">
+      <div class="body-wrap"><article id="post-【Redis】安装单机版Redis" class="article article-type-post" itemscope itemprop="blogPost">
   
+    <div class="article-meta">
+      <a href="/2018/01/26/【Redis】安装单机版Redis/" class="article-date">
+      <time datetime="2018-01-25T16:00:00.000Z" itemprop="datePublished">2018-01-26</time>
+</a>
+
+
+    </div>
   
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
     
     
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      【Redis】安装单机版Redis
+    </h1>
+  
+
+      </header>
       
+      <div class="article-info article-info-post">
+        
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/redis/">redis</a>
+    </div>
+
+
+        
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CentOS/">CentOS</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/redis/">redis</a></li></ul>
+    </div>
+
+        <div class="clearfix"></div>
+      </div>
       
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2018" class="archive-year">2018</a>
-        </div>
-        <div class="archives">
     
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-          <div class="article-meta">
-              <a href="/2018/03/18/【zookeeper】集群搭建/" class="archive-article-date">
-      <time datetime="2018-03-17T16:00:00.000Z" itemprop="datePublished">03-18</time>
-</a>
-
-
-        </div>
-         
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2018/03/18/【zookeeper】集群搭建/">【zookeeper】集群搭建</a>
-    </h1>
-  
-
-        <div class="article-info info-on-archive">
+    <div class="article-entry" itemprop="articleBody">
+      
           
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/zookeeper/">zookeeper</a>
+        <p>官网下载redis安装包，这里使用：<code>redis-3.2.8.tar.gz</code>。安装在<strong>/usr/local</strong>下。</p>
+<h1 id="安装-tcl"><a href="#安装-tcl" class="headerlink" title="安装 tcl"></a>安装 tcl</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">wget http://downloads.sourceforge.net/tcl/tcl8.6.1-src.tar.gz</div><div class="line">tar -xzvf tcl8.6.1-src.tar.gz</div><div class="line">cd  /usr/local/tcl8.6.1/unix/</div><div class="line">./configure  </div><div class="line">make &amp;&amp; make install</div></pre></td></tr></table></figure>
+<h1 id="安装Redis"><a href="#安装Redis" class="headerlink" title="安装Redis"></a>安装Redis</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">tar -zxvf redis-3.2.8.tar.gz</div><div class="line">cd redis-3.2.8</div><div class="line">make </div><div class="line">make test</div><div class="line">make install</div></pre></td></tr></table></figure>
+<h1 id="问题解决"><a href="#问题解决" class="headerlink" title="问题解决"></a>问题解决</h1><h2 id="make出错"><a href="#make出错" class="headerlink" title="make出错"></a>make出错</h2><p>解决办法：<strong>安装gcc</strong><br>步骤：</p>
+<ul>
+<li>能上网：</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">yum install gcc-c++</div></pre></td></tr></table></figure>
+<ul>
+<li>不能上网:<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="http://www.wailian.work/images/2018/01/31/image.png" alt="image.png"></li>
+</ul>
+<h2 id="二次-make出错"><a href="#二次-make出错" class="headerlink" title="二次 make出错"></a>二次 make出错</h2><p>提示：<strong>Jemalloc/jemalloc.h：没有那个文件或目录</strong><br>解决办法：运行<code>make distclean</code>之后再<code>make</code></p>
+<h2 id="make-test出错"><a href="#make-test出错" class="headerlink" title="make test出错"></a>make test出错</h2><p>报如下错误，不过不影响安装。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">!!! WARNING The following tests failed:</div><div class="line"></div><div class="line">*** [err]: Server is able to generate a stack trace on selected systems in tests/integration/logging.tcl</div><div class="line">expected stack trace not found into log file</div><div class="line">Cleanup: may take some time... OK</div><div class="line">make[1]: *** [test] Error 1</div><div class="line">make[1]: Leaving directory `/usr/local/redis-3.2.8/src&apos;</div><div class="line">make: *** [test] Error 2</div></pre></td></tr></table></figure>
+      
     </div>
-
-
-          
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/zookeeper/">zookeeper</a></li></ul>
-    </div>
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
+    
   </div>
+  
+    
+    <div class="copyright">
+        <p><span>本文标题:</span><a href="/2018/01/26/【Redis】安装单机版Redis/">【Redis】安装单机版Redis</a></p>
+        <p><span>文章作者:</span><a href="/" title="回到主页">lzp</a></p>
+        <p><span>发布时间:</span>2018-01-26, 00:00:00</p>
+        <p><span>最后更新:</span>2019-10-06, 09:44:47</p>
+        <p>
+            <span>原始链接:</span><a class="post-url" href="/2018/01/26/【Redis】安装单机版Redis/" title="【Redis】安装单机版Redis">https://liuzhongpo.github.io/2018/01/26/【Redis】安装单机版Redis/</a>
+            <span class="copy-path" data-clipboard-text="原文: https://liuzhongpo.github.io/2018/01/26/【Redis】安装单机版Redis/　　作者: lzp" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <script> var clipboard = new Clipboard('.copy-path'); </script>
+        </p>
+        <p>
+            <span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
+        </p>
+    </div>
+
+
+
+    <nav id="article-nav">
+        
+            <div id="article-nav-newer" class="article-nav-title">
+                <a href="/2018/01/31/【Redis】生产环境启动方案/">
+                    【Redis】生产环境启动方案
+                </a>
+            </div>
+        
+        
+            <div id="article-nav-older" class="article-nav-title">
+                <a href="/2017/11/12/【技术杂技】lombok/">
+                    【技术杂技】Lombok
+                </a>
+            </div>
+        
+    </nav>
+
+  
 </article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-          <div class="article-meta">
-              <a href="/2018/03/12/【zookeeper】基础知识以及操作/" class="archive-article-date">
-      <time datetime="2018-03-11T16:00:00.000Z" itemprop="datePublished">03-12</time>
-</a>
+
+    <div id="toc" class="toc-article">
+        <strong class="toc-title">文章目录</strong>
+        
+            <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#安装-tcl"><span class="toc-number">1.</span> <span class="toc-text">安装 tcl</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#安装Redis"><span class="toc-number">2.</span> <span class="toc-text">安装Redis</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#问题解决"><span class="toc-number">3.</span> <span class="toc-text">问题解决</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#make出错"><span class="toc-number">3.1.</span> <span class="toc-text">make出错</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#二次-make出错"><span class="toc-number">3.2.</span> <span class="toc-text">二次 make出错</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#make-test出错"><span class="toc-number">3.3.</span> <span class="toc-text">make test出错</span></a></li></ol></li></ol>
+        
+    </div>
+    <style>
+        .left-col .switch-btn,
+        .left-col .switch-area {
+            display: none;
+        }
+        .toc-level-3 i,
+        .toc-level-3 ol {
+            display: none !important;
+        }
+    </style>
+
+    <input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">
+
+    <script>
+        yiliaConfig.toc = ["隐藏目录", "显示目录", !!"false"];
+    </script>
 
 
+
+    
+<div class="share">
+    
+        <div class="bdsharebuttonbox">
+            <a href="#" class="fa fa-twitter bds_twi" data-cmd="twi" title="分享到推特"></a>
+            <a href="#" class="fa fa-weibo bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+            <a href="#" class="fa fa-qq bds_sqq" data-cmd="sqq" title="分享给 QQ 好友"></a>
+            <a href="#" class="fa fa-files-o bds_copy" data-cmd="copy" title="复制网址"></a>
+            <a href="#" class="fa fa fa-envelope-o bds_mail" data-cmd="mail" title="通过邮件分享"></a>
+            <a href="#" class="fa fa-weixin bds_weixin" data-cmd="weixin" title="生成文章二维码"></a>
+            <a href="#" class="fa fa-share-alt bds_more" data-cmd="more"></i></a>
         </div>
-         
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2018/03/12/【zookeeper】基础知识以及操作/">【zookeeper】基础知识及操作</a>
-    </h1>
-  
+        <script>
+            window._bd_share_config={
+                "common":{"bdSnsKey":{},"bdText":"【Redis】安装单机版Redis　| LZP BLOG　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+        </script>
+    
 
-        <div class="article-info info-on-archive">
-          
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/zookeeper/">zookeeper</a>
+    
+</div>
+
+
+
+
+
+
+
+    
+        <section class="youyan" id="comments">
+    <script>
+        var loadComment = function(){
+            var d = document, s = d.createElement('script');
+            s.src = 'http://v2.uyan.cc/code/uyan.js?uid=2144710';
+            (d.head || d.body).appendChild(s);
+        }
+    </script>
+    
+    <script> loadComment(); </script>
+
+    <div id="uyan_frame"></div>
+</section>
+    
+
+
+
+
+    <div class="scroll" id="post-nav-button">
+        
+            <a href="/2018/01/31/【Redis】生产环境启动方案/" title="上一篇: 【Redis】生产环境启动方案">
+                <i class="fa fa-angle-left"></i>
+            </a>
+        
+
+        <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
+
+        
+            <a href="/2017/11/12/【技术杂技】lombok/" title="下一篇: 【技术杂技】Lombok">
+                <i class="fa fa-angle-right"></i>
+            </a>
+        
     </div>
 
-
-          
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/zookeeper/">zookeeper</a></li></ul>
-    </div>
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-          <div class="article-meta">
-              <a href="/2018/03/06/【zookeeper】Curator实现基于zookeeper的分布式锁/" class="archive-article-date">
-      <time datetime="2018-03-05T16:00:00.000Z" itemprop="datePublished">03-06</time>
-</a>
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2018/03/18/【zookeeper】集群搭建/">【zookeeper】集群搭建</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/03/12/【zookeeper】基础知识以及操作/">【zookeeper】基础知识及操作</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/03/06/【zookeeper】Curator实现基于zookeeper的分布式锁/">【zookeeper】Curator实现基于zookeeper的分布式锁</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/03/03/【zookeeper】Curator基础/">【zookeeper】Curator基础</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/03/02/【Redis】Redis Replication（主从复制）/">【Redis】Redis Replication（主从复制）</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/31/【Redis】生产环境启动方案/">【Redis】生产环境启动方案</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/26/【Redis】安装单机版Redis/">【Redis】安装单机版Redis</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/12/【技术杂技】lombok/">【技术杂技】Lombok</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/12/【设计模式】单例模式/">【设计模式】单例模式</a></li></ul>
 
 
-        </div>
-         
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2018/03/06/【zookeeper】Curator实现基于zookeeper的分布式锁/">【zookeeper】Curator实现基于zookeeper的分布式锁</a>
-    </h1>
-  
-
-        <div class="article-info info-on-archive">
-          
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/zookeeper/">zookeeper</a>
-    </div>
 
 
-          
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Curator/">Curator</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/zookeeper/">zookeeper</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/分布式锁/">分布式锁</a></li></ul>
-    </div>
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-          <div class="article-meta">
-              <a href="/2018/03/03/【zookeeper】Curator基础/" class="archive-article-date">
-      <time datetime="2018-03-02T16:00:00.000Z" itemprop="datePublished">03-03</time>
-</a>
-
-
-        </div>
-         
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2018/03/03/【zookeeper】Curator基础/">【zookeeper】Curator基础</a>
-    </h1>
-  
-
-        <div class="article-info info-on-archive">
-          
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/zookeeper/">zookeeper</a>
-    </div>
-
-
-          
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Curator/">Curator</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/zookeeper/">zookeeper</a></li></ul>
-    </div>
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-  
-    </div></section>
-  
-
-    
-
+    <script>
+        
+    </script>
 </div>
       <footer id="footer">
     <div class="outer">

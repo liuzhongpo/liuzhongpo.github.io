@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+
+    <!--[if lt IE 9]>
+        <style>body {display: none; background: none !important} </style>
+        <meta http-equiv="Refresh" Content="0; url=//outdatedbrowser.com/" />
+    <![endif]-->
+
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="format-detection" content="telephone=no" />
+<meta name="author" content="lzp" />
+
+
+
+<meta name="description" content="之前接触使用到Curator,与Zookeeper提供的原生客户端、zkClient相比,里面提供了更多丰富的操作，很有必要学习和总结。">
+<meta name="keywords" content="zookeeper,Curator">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【zookeeper】Curator基础">
+<meta property="og:url" content="https://liuzhongpo.github.io/2018/03/03/【zookeeper】Curator基础/index.html">
+<meta property="og:site_name" content="LZP BLOG">
+<meta property="og:description" content="之前接触使用到Curator,与Zookeeper提供的原生客户端、zkClient相比,里面提供了更多丰富的操作，很有必要学习和总结。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-10-06T01:45:26.365Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="【zookeeper】Curator基础">
+<meta name="twitter:description" content="之前接触使用到Curator,与Zookeeper提供的原生客户端、zkClient相比,里面提供了更多丰富的操作，很有必要学习和总结。">
+
+<link rel="apple-touch-icon" href= "/apple-touch-icon.png">
+
+
+    <link rel="alternate" href="/atom.xml" title="LZP BLOG" type="application/atom+xml">
+
+
+
+    <link rel="shortcut icon" href="/favicon.png">
+
+
+
+
+
+    <link href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.css" rel="stylesheet">
+
+
+
+    <script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+    <link href="//cdn.bootcss.com/pace/1.0.2/themes/blue/pace-theme-minimal.css" rel="stylesheet">
+
+
+<link rel="stylesheet" href="/css/style.css">
+
+
+
+<link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+
+
+<title>【zookeeper】Curator基础 | LZP BLOG</title>
+
+<script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
+<script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+
+<script>
+    var yiliaConfig = {
+        fancybox: true,
+        animate: false,
+        isHome: false,
+        isPost: true,
+        isArchive: false,
+        isTag: false,
+        isCategory: false,
+        fancybox_js: "//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.js",
+        scrollreveal: "//cdn.bootcss.com/scrollReveal.js/3.1.4/scrollreveal.min.js",
+        search: true
+    }
+</script>
+
+
+    <script>
+        yiliaConfig.jquery_ui = [true, "//cdn.bootcss.com/jqueryui/1.10.4/jquery-ui.min.js", "//cdn.bootcss.com/jqueryui/1.10.4/css/jquery-ui.min.css"];
+    </script>
+
+
+
+    <script> yiliaConfig.rootUrl = "\/";</script>
+
+
+
+
+
+
+</head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+    <header id="header" class="inner">
+        <a href="/" class="profilepic">
+            <img src="/img/avatar.png" class="animated zoomIn">
+        </a>
+        <hgroup>
+          <h1 class="header-author"><a href="/">lzp</a></h1>
+        </hgroup>
+
+        
+        <p class="header-subtitle">信念和目标，永远洋溢在内心...</p>
+        
+
+        
+            <form id="search-form">
+            <input type="text" id="local-search-input" name="q" placeholder="search..." class="search form-control" autocomplete="off" autocorrect="off" searchonload="false" />
+            <i class="fa fa-times" onclick="resetSearch()"></i>
+            </form>
+            <div id="local-search-result"></div>
+            <p class='no-result'>No results found <i class='fa fa-spinner fa-pulse'></i></p>
+        
+
+
+        
+            <div id="switch-btn" class="switch-btn">
+                <div class="icon">
+                    <div class="icon-ctn">
+                        <div class="icon-wrap icon-house" data-idx="0">
+                            <div class="birdhouse"></div>
+                            <div class="birdhouse_holes"></div>
+                        </div>
+                        <div class="icon-wrap icon-ribbon hide" data-idx="1">
+                            <div class="ribbon"></div>
+                        </div>
+                        
+                        <div class="icon-wrap icon-link hide" data-idx="2">
+                            <div class="loopback_l"></div>
+                            <div class="loopback_r"></div>
+                        </div>
+                        
+                        
+                    </div>
+                    
+                </div>
+                <div class="tips-box hide">
+                    <div class="tips-arrow"></div>
+                    <ul class="tips-inner">
+                        <li>菜单</li>
+                        <li>标签</li>
+                        
+                        <li>友情链接</li>
+                        
+                        
+                    </ul>
+                </div>
+            </div>
+        
+
+        <div id="switch-area" class="switch-area">
+            <div class="switch-wrap">
+                <section class="switch-part switch-part1">
+                    <nav class="header-menu">
+                        <ul>
+                        
+                            <li><a href="/">主页</a></li>
+                        
+                            <li><a href="/archives/">归档</a></li>
+                        
+                            <li><a href="/tags/">标签</a></li>
+                        
+                            <li><a href="/about/">关于</a></li>
+                        
+                        </ul>
+                    </nav>
+                    <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" href="mailto:lzp9294@163.com" title="Email"></a>
+                            
+                                <a class="fa GitHub" href="https://github.com/liuzhongpo/" title="GitHub"></a>
+                            
+                                <a class="fa RSS" href="/atom.xml" title="RSS"></a>
+                            
+                        </ul>
+                    </nav>
+                </section>
+                
+                
+                <section class="switch-part switch-part2">
+                    <div class="widget tagcloud" id="js-tagcloud">
+                        <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/CentOS/">CentOS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Curator/">Curator</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/redis/">redis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tool/">tool</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/zookeeper/">zookeeper</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/分布式锁/">分布式锁</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/多线程/">多线程</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/技术杂技/">技术杂技</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/设计模式/">设计模式</a></li></ul>
+                    </div>
+                </section>
+                
+                
+                
+                <section class="switch-part switch-part3">
+                    <div id="js-friends">
+                    
+                      <a class="main-nav-link switch-friends-link" href="http://leeyom.top">leeyom</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="http://www.importnew.com">importnew</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="http://www.infoq.com/cn">InfoQ</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="http://www.oschina.net">oschina</a>
+                    
+                    </div>
+                </section>
+                
+
+                
+            </div>
+        </div>
+    </header>                
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+      <div class="overlay">
+          <div class="slider-trigger"></div>
+          <h1 class="header-author js-mobile-header hide"><a href="/" title="回到主页">lzp</a></h1>
+      </div>
+    <div class="intrude-less">
+        <header id="header" class="inner">
+            <a href="/" class="profilepic">
+                <img src="/img/avatar.png" class="animated zoomIn">
+            </a>
+            <hgroup>
+              <h1 class="header-author"><a href="/" title="回到主页">lzp</a></h1>
+            </hgroup>
+            
+            <p class="header-subtitle">信念和目标，永远洋溢在内心...</p>
+            
+            <nav class="header-menu">
+                <ul>
+                
+                    <li><a href="/">主页</a></li>
+                
+                    <li><a href="/archives/">归档</a></li>
+                
+                    <li><a href="/tags/">标签</a></li>
+                
+                    <li><a href="/about/">关于</a></li>
+                
+                <div class="clearfix"></div>
+                </ul>
+            </nav>
+            <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" target="_blank" href="mailto:lzp9294@163.com" title="Email"></a>
+                            
+                                <a class="fa GitHub" target="_blank" href="https://github.com/liuzhongpo/" title="GitHub"></a>
+                            
+                                <a class="fa RSS" target="_blank" href="/atom.xml" title="RSS"></a>
+                            
+                        </ul>
+            </nav>
+        </header>                
+    </div>
+    <link class="menu-list" tags="标签" friends="友情链接" about="关于我"/>
+</nav>
+      <div class="body-wrap"><article id="post-【zookeeper】Curator基础" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2018/03/03/【zookeeper】Curator基础/" class="article-date">
+      <time datetime="2018-03-02T16:00:00.000Z" itemprop="datePublished">2018-03-03</time>
+</a>
+
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      【zookeeper】Curator基础
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/zookeeper/">zookeeper</a>
+    </div>
+
+
+        
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Curator/">Curator</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/zookeeper/">zookeeper</a></li></ul>
+    </div>
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Curator是Netflix公司开源的一个Zookeeper客户端，与Zookeeper提供的原生客户端、zkClient相比，Curator的抽象层次更高，简化了Zookeeper客户端的开发量。Curator目前是Apache的顶级项目，里面提供了更多丰富的操作，例如session超时重连、主从选举、分布式计数器、分布式锁等等适用于各种复杂的zookeeper场景的API封装。</p>
+<h1 id="基础API"><a href="#基础API" class="headerlink" title="基础API"></a>基础API</h1><h2 id="创建和开启连接"><a href="#创建和开启连接" class="headerlink" title="创建和开启连接"></a>创建和开启连接</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/** zookeeper地址 */</span></div><div class="line"><span class="keyword">static</span> <span class="keyword">final</span> String CONNECT_ADDR = <span class="string">"192.168.40.40:2181,192.168.40.41:2181,192.168.40.42:2181"</span>;</div><div class="line"><span class="comment">/** session超时时间 */</span></div><div class="line"><span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> SESSION_OUTTIME = <span class="number">5000</span>;<span class="comment">//ms</span></div><div class="line"><span class="comment">//1 重试策略：初试时间为1S，重试10次</span></div><div class="line">RetryPolicy retry = <span class="keyword">new</span> ExponentialBackoffRetry(<span class="number">1000</span>, <span class="number">10</span>);</div><div class="line"><span class="comment">//2 通过工厂创建连接</span></div><div class="line">CuratorFramework cf = CuratorFrameworkFactory.builder()</div><div class="line">        .connectString(CONNECT_ADDR)</div><div class="line">        .sessionTimeoutMs(SESSION_OUTTIME)</div><div class="line">        .retryPolicy(retry)</div><div class="line">        .build();</div><div class="line"><span class="comment">//3 开启连接</span></div><div class="line">cf.start();</div></pre></td></tr></table></figure>
+<p>参数解释：</p>
+<ul>
+<li>connectString 连接串</li>
+<li>sessionTimeoutMs 会话超时时间，默认为60 000 ms</li>
+<li>retryPolicy 重试连接策略。有四种实现分别为ExponentialBackoffRetry、RetryNTimes、RetryOneTimes、RetryUntilElapsed</li>
+<li>connectionTimeoutMs 连接超时时间，默认为15 000ms</li>
+</ul>
+<p><strong>注意：对于retryPolicy策略通过一个接口来让用户自定义实现。</strong></p>
+<h2 id="新加和删除节点"><a href="#新加和删除节点" class="headerlink" title="新加和删除节点"></a>新加和删除节点</h2><p>创建节点create方法：可选链式项：createParentsIfNeeded、withMode、forPath、withACL等<br>删除节点delete方法，可选链式项：deletingChildrenIfNeeded、guaranteed、withVersion、forPath等<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//4 建立节点 指定节点类型(不加withMode默认为持久类型节点)、路径、数据内容</span></div><div class="line">cf.create().creatingParentsIfNeeded()</div><div class="line">        .withMode(CreateMode.PERSISTENT)</div><div class="line">        .forPath(<span class="string">"/super/c1"</span>,<span class="string">"c1内容"</span>.getBytes());</div><div class="line"><span class="comment">//5 删除节点</span></div><div class="line">cf.delete().guaranteed().deletingChildrenIfNeeded().forPath(<span class="string">"/super"</span>);</div></pre></td></tr></table></figure></p>
+<h2 id="读取和修改节点"><a href="#读取和修改节点" class="headerlink" title="读取和修改节点"></a>读取和修改节点</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//读取、修改</span></div><div class="line"><span class="comment">// 创建节点</span></div><div class="line">cf.create().creatingParentsIfNeeded().withMode(CreateMode.PERSISTENT).forPath(<span class="string">"/super/c1"</span>,<span class="string">"c1内容"</span>.getBytes());</div><div class="line">cf.create().creatingParentsIfNeeded().withMode(CreateMode.PERSISTENT).forPath(<span class="string">"/super/c2"</span>,<span class="string">"c2内容"</span>.getBytes());</div><div class="line"><span class="comment">//读取节点</span></div><div class="line">String ret1 = <span class="keyword">new</span> String(cf.getData().forPath(<span class="string">"/super/c2"</span>));</div><div class="line">System.out.println(ret1);</div><div class="line"><span class="comment">//修改节点</span></div><div class="line">cf.setData().forPath(<span class="string">"/super/c2"</span>,<span class="string">"c2更新内容"</span>.getBytes());</div><div class="line">String ret2 = <span class="keyword">new</span> String(cf.getData().forPath(<span class="string">"/super/c2"</span>));</div><div class="line">System.out.println(ret2);</div></pre></td></tr></table></figure>
+<h2 id="绑定回调函数"><a href="#绑定回调函数" class="headerlink" title="绑定回调函数"></a>绑定回调函数</h2><p>异步绑定回调方法。比如创建节点时绑定一个回调函数，该回调函数可以输出服务器的状态码以及服务器事件类型。还可以加入一个线程池进行优化操作。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">ExecutorService pool = Executors.newCachedThreadPool();</div><div class="line">cf.create().creatingParentsIfNeeded().withMode(CreateMode.PERSISTENT)</div><div class="line">        .inBackground(new BackgroundCallback() &#123;</div><div class="line">            @Override</div><div class="line">            public void processResult(CuratorFramework curatorFramework, CuratorEvent curatorEvent) throws Exception &#123;</div><div class="line">                System.out.println(&quot;code:&quot;+ curatorEvent.getResultCode());</div><div class="line">                System.out.println(&quot;type:&quot;+ curatorEvent.getType());</div><div class="line">                System.out.println(&quot;当前线程:&quot;+ Thread.currentThread().getName());</div><div class="line">            &#125;</div><div class="line">        &#125;,pool)</div><div class="line">        .forPath(&quot;/super/c3&quot;,&quot;c3内容&quot;.getBytes());</div></pre></td></tr></table></figure></p>
+<h2 id="读取子节点"><a href="#读取子节点" class="headerlink" title="读取子节点"></a>读取子节点</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//读取子节点getChildren方法和判断节点是否存在checkExists方法</span></div><div class="line">List&lt;String&gt; list = cf.getChildren().forPath(<span class="string">"/super"</span>);</div><div class="line"><span class="keyword">for</span>(String s : list) &#123;</div><div class="line">    System.out.println(s);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="判断节点是否存在"><a href="#判断节点是否存在" class="headerlink" title="判断节点是否存在"></a>判断节点是否存在</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//checkExists()  不存在节点，返回的stat为null。存在则返回的stat结构体信息</span></div><div class="line">Stat stat = cf.checkExists().forPath(<span class="string">"/super"</span>);</div><div class="line">System.out.println(stat);</div></pre></td></tr></table></figure>
+<h1 id="Watch"><a href="#Watch" class="headerlink" title="Watch"></a>Watch</h1><p>如果要使用类似Watch的监听功能，Curator必须依赖一个jar包，maven依赖：<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.apache.curator<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>curator-recipes<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>4.0.0<span class="tag">&lt;/<span class="name">version</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></div></pre></td></tr></table></figure></p>
+<p>有了这个依赖包，我们使用NodeCache的方式去客户端实例中注册一个监听缓存，然后实现对应的监听方法即可。这里我们主要有两种监听方式：</p>
+<ul>
+<li>NodeCacheListener：监听节点的新增、修改操作</li>
+<li>PathChildrenCacheListener：监听子节点的新增、修改、删除操作</li>
+</ul>
+<h2 id="NodeCacheListener"><a href="#NodeCacheListener" class="headerlink" title="NodeCacheListener"></a>NodeCacheListener</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//4 建立一个cache缓存</span></div><div class="line"><span class="keyword">final</span> NodeCache cache = <span class="keyword">new</span> NodeCache(cf, <span class="string">"/super"</span>, <span class="keyword">false</span>);</div><div class="line"><span class="comment">//boolean buildInitial:是否构建的时候初始化</span></div><div class="line">cache.start(<span class="keyword">true</span>);</div><div class="line">cache.getListenable().addListener(<span class="keyword">new</span> NodeCacheListener() &#123;</div><div class="line">    <span class="comment">/**</span></div><div class="line"><span class="comment">     * 触发事件为创建节点和更新节点，在删除节点的时候并不触发此操作。</span></div><div class="line"><span class="comment">     */</span></div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">nodeChanged</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>&#123;</div><div class="line">        System.out.println(<span class="string">"路径为："</span> + cache.getCurrentData().getPath());</div><div class="line">        System.out.println(<span class="string">"数据为："</span> + <span class="keyword">new</span> String(cache.getCurrentData().getData()));</div><div class="line">        System.out.println(<span class="string">"状态为："</span> + cache.getCurrentData().getStat());</div><div class="line">        System.out.println(<span class="string">"---------------------------------------"</span>);</div><div class="line"></div><div class="line">    &#125;</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<p>代码解释：<br>1、NodeCache<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="title">NodeCache</span><span class="params">(CuratorFramework client, String path, <span class="keyword">boolean</span> dataIsCompressed)</span></span>&#123;...&#125;</div></pre></td></tr></table></figure></p>
+<ul>
+<li>CuratorFramework client：连接</li>
+<li>String path : 节点的路径</li>
+<li>boolean dataIsCompressed: 是否压缩数据，不写底层默认为false</li>
+</ul>
+<p>2、cache.start(true)<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span>  <span class="title">start</span><span class="params">(<span class="keyword">boolean</span> buildInitial)</span> <span class="keyword">throws</span> Exception</span>&#123;...&#125;</div></pre></td></tr></table></figure></p>
+<ul>
+<li>boolean buildInitial:是否构建的时候初始化</li>
+</ul>
+<h2 id="PathChildren…"><a href="#PathChildren…" class="headerlink" title="PathChildren…"></a>PathChildren…</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//4 建立一个PathChildrenCache缓存，第三个参数是否为接收节点数据内容</span></div><div class="line">PathChildrenCache cache = <span class="keyword">new</span> PathChildrenCache(cf, <span class="string">"/super"</span>, <span class="keyword">false</span>);</div><div class="line"><span class="comment">//5 在初始化的时候就进行缓存监听</span></div><div class="line">cache.start(PathChildrenCache.StartMode.POST_INITIALIZED_EVENT);</div><div class="line">cache.getListenable().addListener(<span class="keyword">new</span> PathChildrenCacheListener() &#123;</div><div class="line">    <span class="comment">/**</span></div><div class="line"><span class="comment">     * 新建、修改、删除</span></div><div class="line"><span class="comment">     */</span></div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">childEvent</span><span class="params">(CuratorFramework client, PathChildrenCacheEvent event)</span> <span class="keyword">throws</span> Exception </span>&#123;</div><div class="line">        <span class="keyword">switch</span> (event.getType()) &#123;</div><div class="line">            <span class="keyword">case</span> CHILD_ADDED:</div><div class="line">                System.out.println(<span class="string">"CHILD_ADDED :"</span> + event.getData().getPath());</div><div class="line">                <span class="keyword">break</span>;</div><div class="line">            <span class="keyword">case</span> CHILD_UPDATED:</div><div class="line">                System.out.println(<span class="string">"CHILD_UPDATED :"</span> + event.getData().getPath());</div><div class="line">                <span class="keyword">break</span>;</div><div class="line">            <span class="keyword">case</span> CHILD_REMOVED:</div><div class="line">                System.out.println(<span class="string">"CHILD_REMOVED :"</span> + event.getData().getPath());</div><div class="line">                <span class="keyword">break</span>;</div><div class="line">            <span class="keyword">default</span>:</div><div class="line">                <span class="keyword">break</span>;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<p>代码解释：<br>1、PathChildrenCache<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">public PathChildrenCache(CuratorFramework client, String path, boolean cacheData)&#123;...&#125;</div></pre></td></tr></table></figure></p>
+<ul>
+<li>CuratorFramework client：连接</li>
+<li>String path : 节点的路径</li>
+<li>boolean cacheData: 是否缓存数据，这里一般是为true</li>
+</ul>
+<p>2、cache.start(PathChildrenCache.StartMode.POST_INITIALIZED_EVENT)<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span>  <span class="title">start</span><span class="params">(<span class="keyword">boolean</span> buildInitial)</span> <span class="keyword">throws</span> Exception</span>&#123;...&#125;</div></pre></td></tr></table></figure></p>
+<ul>
+<li>PathChildrenCache.StartMode.POST_INITIALIZED_EVENT:在初始化的时候就进行缓存监听</li>
+</ul>
+
+      
+    </div>
+    
+  </div>
+  
+    
+    <div class="copyright">
+        <p><span>本文标题:</span><a href="/2018/03/03/【zookeeper】Curator基础/">【zookeeper】Curator基础</a></p>
+        <p><span>文章作者:</span><a href="/" title="回到主页">lzp</a></p>
+        <p><span>发布时间:</span>2018-03-03, 00:00:00</p>
+        <p><span>最后更新:</span>2019-10-06, 09:45:26</p>
+        <p>
+            <span>原始链接:</span><a class="post-url" href="/2018/03/03/【zookeeper】Curator基础/" title="【zookeeper】Curator基础">https://liuzhongpo.github.io/2018/03/03/【zookeeper】Curator基础/</a>
+            <span class="copy-path" data-clipboard-text="原文: https://liuzhongpo.github.io/2018/03/03/【zookeeper】Curator基础/　　作者: lzp" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <script> var clipboard = new Clipboard('.copy-path'); </script>
+        </p>
+        <p>
+            <span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
+        </p>
+    </div>
+
+
+
+    <nav id="article-nav">
+        
+            <div id="article-nav-newer" class="article-nav-title">
+                <a href="/2018/03/06/【zookeeper】Curator实现基于zookeeper的分布式锁/">
+                    【zookeeper】Curator实现基于zookeeper的分布式锁
+                </a>
+            </div>
+        
+        
+            <div id="article-nav-older" class="article-nav-title">
+                <a href="/2018/03/02/【Redis】Redis Replication（主从复制）/">
+                    【Redis】Redis Replication（主从复制）
+                </a>
+            </div>
+        
+    </nav>
+
+  
+</article>
+
+    <div id="toc" class="toc-article">
+        <strong class="toc-title">文章目录</strong>
+        
+            <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#简介"><span class="toc-number">1.</span> <span class="toc-text">简介</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#基础API"><span class="toc-number">2.</span> <span class="toc-text">基础API</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#创建和开启连接"><span class="toc-number">2.1.</span> <span class="toc-text">创建和开启连接</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#新加和删除节点"><span class="toc-number">2.2.</span> <span class="toc-text">新加和删除节点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#读取和修改节点"><span class="toc-number">2.3.</span> <span class="toc-text">读取和修改节点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#绑定回调函数"><span class="toc-number">2.4.</span> <span class="toc-text">绑定回调函数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#读取子节点"><span class="toc-number">2.5.</span> <span class="toc-text">读取子节点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#判断节点是否存在"><span class="toc-number">2.6.</span> <span class="toc-text">判断节点是否存在</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Watch"><span class="toc-number">3.</span> <span class="toc-text">Watch</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#NodeCacheListener"><span class="toc-number">3.1.</span> <span class="toc-text">NodeCacheListener</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#PathChildren…"><span class="toc-number">3.2.</span> <span class="toc-text">PathChildren…</span></a></li></ol></li></ol>
+        
+    </div>
+    <style>
+        .left-col .switch-btn,
+        .left-col .switch-area {
+            display: none;
+        }
+        .toc-level-3 i,
+        .toc-level-3 ol {
+            display: none !important;
+        }
+    </style>
+
+    <input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">
+
+    <script>
+        yiliaConfig.toc = ["隐藏目录", "显示目录", !!"false"];
+    </script>
+
+
+
+    
+<div class="share">
+    
+        <div class="bdsharebuttonbox">
+            <a href="#" class="fa fa-twitter bds_twi" data-cmd="twi" title="分享到推特"></a>
+            <a href="#" class="fa fa-weibo bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+            <a href="#" class="fa fa-qq bds_sqq" data-cmd="sqq" title="分享给 QQ 好友"></a>
+            <a href="#" class="fa fa-files-o bds_copy" data-cmd="copy" title="复制网址"></a>
+            <a href="#" class="fa fa fa-envelope-o bds_mail" data-cmd="mail" title="通过邮件分享"></a>
+            <a href="#" class="fa fa-weixin bds_weixin" data-cmd="weixin" title="生成文章二维码"></a>
+            <a href="#" class="fa fa-share-alt bds_more" data-cmd="more"></i></a>
+        </div>
+        <script>
+            window._bd_share_config={
+                "common":{"bdSnsKey":{},"bdText":"【zookeeper】Curator基础　| LZP BLOG　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+        </script>
+    
+
+    
+</div>
+
+
+
+
+
+
+
+    
+        <section class="youyan" id="comments">
+    <script>
+        var loadComment = function(){
+            var d = document, s = d.createElement('script');
+            s.src = 'http://v2.uyan.cc/code/uyan.js?uid=2144710';
+            (d.head || d.body).appendChild(s);
+        }
+    </script>
+    
+    <script> loadComment(); </script>
+
+    <div id="uyan_frame"></div>
+</section>
+    
+
+
+
+
+    <div class="scroll" id="post-nav-button">
+        
+            <a href="/2018/03/06/【zookeeper】Curator实现基于zookeeper的分布式锁/" title="上一篇: 【zookeeper】Curator实现基于zookeeper的分布式锁">
+                <i class="fa fa-angle-left"></i>
+            </a>
+        
+
+        <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
+
+        
+            <a href="/2018/03/02/【Redis】Redis Replication（主从复制）/" title="下一篇: 【Redis】Redis Replication（主从复制）">
+                <i class="fa fa-angle-right"></i>
+            </a>
+        
+    </div>
+
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2018/03/18/【zookeeper】集群搭建/">【zookeeper】集群搭建</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/03/12/【zookeeper】基础知识以及操作/">【zookeeper】基础知识及操作</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/03/06/【zookeeper】Curator实现基于zookeeper的分布式锁/">【zookeeper】Curator实现基于zookeeper的分布式锁</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/03/03/【zookeeper】Curator基础/">【zookeeper】Curator基础</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/03/02/【Redis】Redis Replication（主从复制）/">【Redis】Redis Replication（主从复制）</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/31/【Redis】生产环境启动方案/">【Redis】生产环境启动方案</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/26/【Redis】安装单机版Redis/">【Redis】安装单机版Redis</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/12/【技术杂技】lombok/">【技术杂技】Lombok</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/12/【设计模式】单例模式/">【设计模式】单例模式</a></li></ul>
+
+
+
+
+    <script>
+        
+    </script>
+</div>
+      <footer id="footer">
+    <div class="outer">
+        <div id="footer-info">
+            <div class="footer-left">
+                <i class="fa fa-copyright"></i> 
+                2017-2019 lzp
+            </div>
+            <div class="footer-right">
+                愿清澈如莲，愿自由如风，愿爱如少年
+            </div>
+        </div>
+        
+            <div class="visit">
+                
+                    <span id="busuanzi_container_site_pv" style='display:none'>
+                        <span id="site-visit" title="本站到访数"><i class="fa fa-user" aria-hidden="true"></i><span id="busuanzi_value_site_uv"></span>
+                        </span>
+                    </span>
+                
+                
+                    <span>| </span>
+                
+                
+                    <span id="busuanzi_container_page_pv" style='display:none'>
+                        <span id="page-visit"  title="本页阅读量"><i class="fa fa-eye animated infinite pulse" aria-hidden="true"></i><span id="busuanzi_value_page_pv"></span>
+                        </span>
+                    </span>
+                
+            </div>
+        
+    </div>
+</footer>
+    </div>
+    
+<script data-main="/js/main.js" src="//cdn.bootcss.com/require.js/2.2.0/require.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            var iPad = window.navigator.userAgent.indexOf('iPad');
+            if (iPad > -1 || $(".left-col").css("display") === "none") {
+                var bgColorList = ["#9db3f4", "#414141", "#e5a859", "#f5dfc6", "#c084a0", "#847e72", "#cd8390", "#996731"];
+                var bgColor = Math.ceil(Math.random() * (bgColorList.length - 1));
+                $("body").css({"background-color": bgColorList[bgColor], "background-size": "cover"});
+            }
+            else {
+                var backgroundnum = 1;
+                var backgroundimg = "url(/background/bg-x.jpg)".replace(/x/gi, Math.ceil(Math.random() * backgroundnum));
+                $("body").css({"background": backgroundimg, "background-attachment": "fixed", "background-size": "cover"});
+            }
+        })
+    </script>
+
+
+
+
+
+<div class="scroll" id="scroll">
+    <a href="#" title="返回顶部"><i class="fa fa-arrow-up"></i></a>
+    <a href="#comments" onclick="load$hide();" title="查看评论"><i class="fa fa-comments-o"></i></a>
+    <a href="#footer" title="转到底部"><i class="fa fa-arrow-down"></i></a>
+</div>
+<script>
+    // Open in New Window
+    
+        var oOpenInNew = {
+            
+             title: "a.article-title, .article-more-link a", 
+             post: ".article-entry a[href], .copyright a[href]", 
+             tags: ".article-tag a", 
+            
+            
+             archives: ".archive-article-title", 
+             miniArchives: "a.post-list-link", 
+            
+             friends: "#js-friends a", 
+             socail: ".social a" 
+        }
+        for (var x in oOpenInNew) {
+            $(oOpenInNew[x]).attr("target", "_blank");
+        }
+    
+</script>
+
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+  </div>
+</body>
+</html>
